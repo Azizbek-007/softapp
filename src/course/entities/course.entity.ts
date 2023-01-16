@@ -2,7 +2,7 @@ import { Lead } from "src/leads/entities/lead.entity";
 import { Order } from "src/order/entities/order.entity";
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+@Entity('courses')
 export class Course extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;

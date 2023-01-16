@@ -19,6 +19,5 @@ export class CreateLeadDto {
     @IsEnum(LeadsStatus)
     status: LeadsStatus;
 
-    course: Course;
     comment: string;
 }

@@ -1,18 +1,10 @@
 import { Course } from "src/course/entities/course.entity";
 import { Lead } from "src/leads/entities/lead.entity";
-import { LeadsStatus } from "src/leads/role.enum";
-import { SaveOptions, RemoveOptions, ManyToOne, Entity, Column } from "typeorm";
+import { ManyToOne, Entity } from "typeorm";
 
-@Entity()
+@Entity('orders')
 export class Order extends Lead {
 
-    @ManyToOne((type) => Course, (course) => course.order, 
-    {
-        eager: true,
-        cascade: true
-    })
+    @ManyToOne((type) => Course, (course) => course.order, { eager: true })
     course: Course;
-
-    @Column({ nullable: true })
-    courseId: number
 }

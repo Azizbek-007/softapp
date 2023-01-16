@@ -9,6 +9,7 @@ import { LeadsModule } from './leads/leads.module';
 import { InstrumentModule } from './instrument/instrument.module';
 import { SettingsModule } from './settings/settings.module';
 import { OrderModule } from './order/order.module';
+import { SettingModule } from './setting/setting.module';
 
 
 @Module({
@@ -19,9 +20,10 @@ import { OrderModule } from './order/order.module';
     LeadsModule,
     InstrumentModule,
     SettingsModule,
-    OrderModule
+    OrderModule,
+    SettingModule
   ],
-  controllers: [AppController],
+  controllers: [AppController], 
   providers: [AppService],
 })
 export class AppModule {}

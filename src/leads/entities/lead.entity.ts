@@ -2,7 +2,7 @@ import { Course } from "src/course/entities/course.entity";
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { LeadsStatus } from "../role.enum";
 
-@Entity()
+@Entity('leads')
 export class Lead extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;

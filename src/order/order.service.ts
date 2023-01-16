@@ -15,7 +15,9 @@ export class OrderService {
 
   async create(createOrderDto: CreateOrderDto) {
     let lead = await this.LeadRepository.findOneBy({ id: createOrderDto.id });
+   
     if (!lead) throw new NotFoundException(`Not found lead id ${createOrderDto.id}`);
+
     let new_order = this.OrderRepository.create({
       user_id: lead.user_id,
       FIO: lead.FIO,
@@ -38,7 +40,7 @@ export class OrderService {
 
   async findAll() {
     let find_order =  await this.OrderRepository.findBy({
-      courseId: Not(IsNull())
+      course: Not(IsNull())
     });
   
     if(find_order.length == 0) {
@@ -51,11 +53,27 @@ export class OrderService {
     return `This action returns a #${id} order`;
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
+  async update(id: number, updateOrderDto: UpdateOrderDto) {
+    let find_order = await this.OrderRepository.findOneBy({ id });
+    if (find_order == null) {
+      throw new NotFoundException();
+    }
+    try {
+      await this.OrderRepository.update(id, updateOrderDto);
+    } catch (error) {
+      if (error['errno'] == 1452){
+        throw new NotFoundException("Not Found cours")
+      }
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  async remove(id: number) {
+    let find_order =  await this.OrderRepository.findOneBy({
+      id: id,
+    });
+    if (find_order == null) {
+      throw new NotFoundException();
+    }
+    await find_order.softRemove();
   }
 }

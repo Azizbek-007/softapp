@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, InternalServerErrorException, MethodNotAllowedException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -50,6 +50,13 @@ export class CourseService {
     if (!find) {
       throw new NotFoundException();
     }
-    await find.remove();
+    try {
+      await find.remove(); 
+    } catch (error) {
+      if (error['errno'] == 1451){
+        throw new MethodNotAllowedException()
+      }
+      throw new InternalServerErrorException(error);
+    }
   }
 }
