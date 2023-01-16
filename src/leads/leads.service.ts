@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Course } from 'src/course/entities/course.entity';
+import { IsNull, Not, Repository } from 'typeorm';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { Lead } from './entities/lead.entity';
@@ -30,12 +31,21 @@ export class LeadsService {
     return find;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} lead`;
-  }
+  // async findAll_Order() {
+  //   let find = await this.LeadRepository.findBy({ deletedAt: null, course: Not(IsNull()) });
+  //   if (find.length == 0) {
+  //     throw new NotFoundException();
+  //   }
+  //   return find;
+  // }
 
-  update(id: number, updateLeadDto: UpdateLeadDto) {
-    return `This action updates a #${id} lead`;
+  async update(id: number, updateLeadDto: UpdateLeadDto) {
+    let find = await this.LeadRepository.findOneBy({ deletedAt: null, id });
+    if (!find) {
+      throw new NotFoundException();
+    }
+    await this.LeadRepository.update(id, updateLeadDto);
+    
   }
 
   remove(id: number) {

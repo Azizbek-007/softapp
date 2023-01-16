@@ -12,7 +12,7 @@ export class CourseService {
   ) {}
 
   async create(createCourseDto: CreateCourseDto) {
-    let course = await this.CoureRepository.create({
+    let course = this.CoureRepository.create({
       name: createCourseDto.name,
       clicked: 0
     });
@@ -27,12 +27,8 @@ export class CourseService {
   }
 
   async findAll() {
-    let courses = await this.CoureRepository.find({
-      where: {
-        deletedAt: null
-      }
-    });
-    if (courses == null) {
+    let courses = await this.CoureRepository.find();
+    if (courses.length == 0) {
       throw new NotFoundException();
     }
     return courses;
@@ -54,6 +50,6 @@ export class CourseService {
     if (!find) {
       throw new NotFoundException();
     }
-    await this.CoureRepository.remove(find);
+    await find.remove();
   }
 }

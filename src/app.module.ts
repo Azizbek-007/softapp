@@ -8,6 +8,8 @@ import { CourseModule } from './course/course.module';
 import { LeadsModule } from './leads/leads.module';
 import { InstrumentModule } from './instrument/instrument.module';
 import { SettingsModule } from './settings/settings.module';
+import { OrderModule } from './order/order.module';
+
 
 @Module({
   imports: [
@@ -16,7 +18,8 @@ import { SettingsModule } from './settings/settings.module';
     CourseModule,
     LeadsModule,
     InstrumentModule,
-    SettingsModule
+    SettingsModule,
+    OrderModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -17,7 +17,7 @@ export class CourseController {
     return this.courseService.findAll();
   }
 
-  @Patch(':id')
+  @Get(':id')
   update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
     return this.courseService.update(+id, updateCourseDto);
   }
