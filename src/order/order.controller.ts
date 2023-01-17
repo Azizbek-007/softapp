@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 
+@UseGuards(AuthGuard())
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}

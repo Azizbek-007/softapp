@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 
+@UseGuards(AuthGuard())
 @Controller('lead')
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
