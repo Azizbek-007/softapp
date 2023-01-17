@@ -11,10 +11,9 @@ export class CourseService {
     @InjectRepository(Course) private CoureRepository: Repository<Course>,
   ) {}
 
-  async create(createCourseDto: CreateCourseDto) {
+  async create(createCourseDto: CreateCourseDto): Promise<Course> {
     let course = this.CoureRepository.create({
       name: createCourseDto.name,
-      clicked: 0
     });
 
     try {
@@ -26,7 +25,7 @@ export class CourseService {
 
   }
 
-  async findAll() {
+  async findAll(): Promise<Course[]> {
     let courses = await this.CoureRepository.find();
     if (courses.length == 0) {
       throw new NotFoundException();
@@ -34,7 +33,7 @@ export class CourseService {
     return courses;
   }
 
-  async update(id: number, updateCourseDto: UpdateCourseDto) {
+  async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
     let find = await this.CoureRepository.findOneBy({ id });
     if (!find) {
       throw new NotFoundException();
@@ -45,7 +44,7 @@ export class CourseService {
     return find;
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<void> {
     let find = await this.CoureRepository.findOneBy({ id });
     if (!find) {
       throw new NotFoundException();

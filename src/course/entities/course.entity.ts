@@ -10,7 +10,7 @@ export class Course extends BaseEntity{
     @Column()
     name: string;
 
-    @Column({ nullable: false })
+    @Column({ default: 0 })
     clicked: number;
 
     @OneToMany((type) => Order, (order) => order.course)

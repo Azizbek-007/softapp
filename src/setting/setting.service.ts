@@ -15,7 +15,7 @@ export class SettingService {
     private SettingRepository: Repository<Setting>,
     ) {}
 
-  async create(createSettingDto: CreateSettingDto) {
+  async create(createSettingDto: CreateSettingDto): Promise<void> {
     let find_bot = await this.SettingRepository.findOneBy({ bot_token: createSettingDto.bot_token });
     if (find_bot) throw new ConflictException("bot exist") 
 
@@ -44,7 +44,7 @@ export class SettingService {
     return all_bots;
   }
 
-  async Webhook_bot(id: number) {
+  async Webhook_bot(id: number): Promise<void> {
     
     let tg_bot = await this.SettingRepository.findOneBy({ id });
     if (tg_bot == null) throw new NotFoundException("ID");
@@ -59,7 +59,7 @@ export class SettingService {
 
 
 
-  async remove(id: number) {
+  async remove(id: number): Promise<void> {
     let tg_bot = await this.SettingRepository.findOneBy({ id });
     if (tg_bot == null) throw new NotFoundException("ID");
 

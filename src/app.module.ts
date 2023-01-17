@@ -9,6 +9,7 @@ import { OrderModule } from './order/order.module';
 import { SettingModule } from './setting/setting.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -22,7 +23,8 @@ import { join } from 'path';
     LeadsModule,
     InstrumentModule,
     OrderModule,
-    SettingModule
+    SettingModule,
+    AuthModule
   ]
 })
 export class AppModule {}

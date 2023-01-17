@@ -13,7 +13,7 @@ export class OrderService {
     @InjectRepository(Lead) private LeadRepository: Repository<Lead>
   ) {}
 
-  async create(createOrderDto: CreateOrderDto) {
+  async create(createOrderDto: CreateOrderDto): Promise<Order> {
  
     let new_order = this.OrderRepository.create(createOrderDto);
     try {
@@ -27,7 +27,7 @@ export class OrderService {
     }
   }
 
-  async findAll() {
+  async findAll(): Promise<Order[]> {
     let find_order =  await this.OrderRepository.findBy({
       course: Not(IsNull())
     });
@@ -38,7 +38,7 @@ export class OrderService {
     return find_order;
   }
 
-  findOne(id: number) {
+  findOne(id: number): string {
     return `This action returns a #${id} order`;
   }
 
@@ -56,7 +56,7 @@ export class OrderService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<void> {
     let find_order =  await this.OrderRepository.findOneBy({
       id: id,
     });
