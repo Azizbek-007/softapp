@@ -1,5 +1,5 @@
-import { IsString, IsPhoneNumber, IsEnum } from 'class-validator';
-import { Course } from 'src/course/entities/course.entity';
+import { IsString, IsPhoneNumber, IsEnum, IsNumber } from 'class-validator';
+import { Instrument } from 'src/instrument/entities/instrument.entity';
 import { LeadsStatus } from '../role.enum';
 
 export class CreateLeadDto {
@@ -13,11 +13,11 @@ export class CreateLeadDto {
     @IsPhoneNumber('UZ')
     phone: string;
 
-    @IsString()
-    utm: string;
-
     @IsEnum(LeadsStatus)
     status: LeadsStatus;
+
+    @IsNumber()
+    instrument: Instrument;
 
     comment: string;
 }

@@ -1,5 +1,7 @@
 import { Course } from "src/course/entities/course.entity";
-import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Instrument } from "src/instrument/entities/instrument.entity";
+import { Order } from "src/order/entities/order.entity";
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { LeadsStatus } from "../role.enum";
 
 @Entity('leads')
@@ -16,18 +18,19 @@ export class Lead extends BaseEntity {
     @Column({ nullable: true })
     phone: string;
 
-    @Column()
-    utm: string;
 
     @Column('enum', { enum: LeadsStatus})
     status: LeadsStatus;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true }) 
     comment: string;
+
+    @ManyToOne(() => Instrument, (instrument) => instrument.leads, { eager: true })
+    instrument: Instrument;
+
+    @OneToMany(() => Order, (order) => order.lead)
+    order: Order[];
 
     @CreateDateColumn({ name: 'created_at'})
     createdAt: Date;
-
-    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
-    deletedAt: Date;
 }

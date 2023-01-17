@@ -14,25 +14,14 @@ export class OrderService {
   ) {}
 
   async create(createOrderDto: CreateOrderDto) {
-    let lead = await this.LeadRepository.findOneBy({ id: createOrderDto.id });
-   
-    if (!lead) throw new NotFoundException(`Not found lead id ${createOrderDto.id}`);
-
-    let new_order = this.OrderRepository.create({
-      user_id: lead.user_id,
-      FIO: lead.FIO,
-      phone: lead.phone,
-      utm: lead.utm,
-      status: lead.status,
-      comment: createOrderDto.comment,
-      course: createOrderDto.course
-    });
+ 
+    let new_order = this.OrderRepository.create(createOrderDto);
     try {
       await new_order.save();
       return new_order;
     } catch (error) {
       if (error['code'] == 'ER_NO_REFERENCED_ROW_2') {
-        throw new NotFoundException("Not found course id " + createOrderDto.course);
+        throw new NotFoundException("Not found course or lead id " + createOrderDto.course);
       }
       throw new InternalServerErrorException(error);
     }
@@ -74,6 +63,6 @@ export class OrderService {
     if (find_order == null) {
       throw new NotFoundException();
     }
-    await find_order.softRemove();
+    await this.OrderRepository.remove(find_order);
   }
 }

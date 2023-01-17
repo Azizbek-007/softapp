@@ -24,7 +24,7 @@ export class LeadsService {
   }
 
   async findAll() {
-    let find = await this.LeadRepository.findBy({ deletedAt: null });
+    let find = await this.LeadRepository.find();
     if (find.length == 0) {
       throw new NotFoundException();
     }
@@ -32,19 +32,18 @@ export class LeadsService {
   }
 
   async update(id: number, updateLeadDto: UpdateLeadDto) {
-    let find = await this.LeadRepository.findOneBy({ deletedAt: null, id });
+    let find = await this.LeadRepository.findOneBy({ id });
     if (!find) {
       throw new NotFoundException();
     }
     await this.LeadRepository.update(id, updateLeadDto);
-    
   }
 
   async remove(id: number) {
-    let find = await this.LeadRepository.findOneBy({ deletedAt: null, id });
+    let find = await this.LeadRepository.findOneBy({ id });
     if (!find) {
       throw new NotFoundException();
     }
-    await find.softRemove();
+    await this.LeadRepository.remove(find);
   }
 }
