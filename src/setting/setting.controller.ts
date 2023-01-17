@@ -17,14 +17,9 @@ export class SettingController {
     return this.settingService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.settingService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSettingDto: UpdateSettingDto) {
-    return this.settingService.update(+id, updateSettingDto);
+  @Get('webhook/:id')
+  webhook_bot(@Param('id') id: string) {
+    return this.settingService.Webhook_bot(+id);
   }
 
   @Delete(':id')

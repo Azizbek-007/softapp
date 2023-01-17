@@ -12,7 +12,7 @@ export class Setting extends BaseEntity {
     @Column()
     bot_username: string;
 
-    @Column({ nullable: true })
+    @Column({ select: false })
     path: string;
 
     @Column('enum', {enum: LeadsStatus })
