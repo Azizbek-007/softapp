@@ -19,7 +19,7 @@ export class InstrumentService {
     return new_link;
   }
 
-  async findAll() {
+  async findAll(): Promise<Instrument[]> {
     let all_links = await this.InstrumentRepository.find();
     if (all_links.length == 0) {
       throw new NotFoundException();

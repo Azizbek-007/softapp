@@ -4,7 +4,7 @@ import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @Controller('instrument')
 export class InstrumentController {
   constructor(private readonly instrumentService: InstrumentService) {}

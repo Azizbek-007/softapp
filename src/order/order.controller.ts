@@ -4,7 +4,7 @@ import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}

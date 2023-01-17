@@ -12,6 +12,9 @@ export class Setting extends BaseEntity {
     @Column()
     bot_username: string;
 
+    @Column()
+    bot_chat_id: string;
+
     @Column({ select: false })
     path: string;
 

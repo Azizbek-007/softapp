@@ -4,7 +4,7 @@ import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @Controller('lead')
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}

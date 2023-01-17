@@ -7,6 +7,8 @@ export class CreateSettingDto {
     bot_token: string;
 
     bot_username: string;
+
+    bot_chat_id: string;
     
     path: string;
 

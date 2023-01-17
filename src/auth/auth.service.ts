@@ -26,7 +26,7 @@ export class AuthService {
     try {
       await new_user.save();
     } catch (error) {
-      if (error.code === '23505') {
+      if (error.code == 'ER_DUP_ENTRY') {
         throw new ConflictException('Username already exists');
       } else {
         throw new InternalServerErrorException();

@@ -28,6 +28,7 @@ export class SettingService {
       fse.copySync(process.cwd()+'/bots/bot.js', bot_path)
       createSettingDto.path = bot_path;
       createSettingDto.bot_username = 'https://t.me/'+data.result?.username;
+      createSettingDto.bot_chat_id = data.result?.id;
       createSettingDto.status = 1;
       let new_bot = this.SettingRepository.create(createSettingDto);
       await new_bot.save() 
