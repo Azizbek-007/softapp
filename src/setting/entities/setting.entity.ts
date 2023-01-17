@@ -1,1 +1,23 @@
-export class Setting {}
+import { LeadsStatus } from "src/leads/role.enum";
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity('settings')
+export class Setting extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    bot_token: string;
+
+    @Column()
+    bot_username: string;
+
+    @Column({ nullable: true })
+    path: string;
+
+    @Column('enum', {enum: LeadsStatus })
+    status: LeadsStatus;
+
+    @CreateDateColumn({ name: 'created_at'})
+    createdAt: Date;
+}
