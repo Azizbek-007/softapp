@@ -5,7 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Setting } from './entities/setting.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ Setting ])],
+  imports:[
+            TypeOrmModule.forFeature([ Setting ]),
+          ],
   controllers: [SettingController],
   providers: [SettingService]
 })

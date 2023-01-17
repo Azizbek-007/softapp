@@ -6,6 +6,8 @@ export class CreateSettingDto {
     @IsString()
     bot_token: string;
 
+    bot_username: string;
+    
     path: string;
 
     status: LeadsStatus;   
