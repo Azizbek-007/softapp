@@ -28,11 +28,9 @@ export class Lead extends BaseEntity {
     @ManyToOne(() => Instrument, (instrument) => instrument.leads, { eager: true })
     instrument: Instrument;
 
-    @OneToMany(() => Order, (order) => order.lead)
-    order: Order[];
-
+    @ManyToOne(() => Order, (order) => order.lead, { cascade: true })
+    order: Order;
 
     @CreateDateColumn({ name: 'created_at',  type: 'datetime'})
     createdAt: Date;
-
 }

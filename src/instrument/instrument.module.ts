@@ -8,7 +8,7 @@ import { Setting } from 'src/setting/entities/setting.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Instrument, Setting]),
+    TypeOrmModule.forFeature([Instrument, Setting, ]),
     AuthModule,
   ],
   controllers: [InstrumentController],

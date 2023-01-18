@@ -2,6 +2,7 @@ import { ConflictException, Injectable, InternalServerErrorException, NotFoundEx
 import { InjectRepository } from '@nestjs/typeorm';
 import { from } from 'rxjs';
 import { Course } from 'src/course/entities/course.entity';
+import { Instrument } from 'src/instrument/entities/instrument.entity';
 import { Between, IsNull, Not, Repository } from 'typeorm';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
@@ -11,10 +12,14 @@ import { Lead } from './entities/lead.entity';
 export class LeadsService {
   constructor(
     @InjectRepository(Lead)
-    private LeadRepository: Repository<Lead>
+    private LeadRepository: Repository<Lead>,
+    @InjectRepository(Instrument) private InstrumentRepository: Repository<Instrument>
   ) {}
 
   async create(createLeadDto: CreateLeadDto) {
+    let inst_hash = createLeadDto.instrument;
+    let inst = await this.InstrumentRepository.findOneBy({ code: inst_hash })
+    createLeadDto.instrument = inst.id;
     let form_lead = this.LeadRepository.create(createLeadDto);
     try {
       await form_lead.save()
@@ -69,6 +74,7 @@ export class LeadsService {
     }
     delete updateLeadDto.user_id;
     await this.LeadRepository.update(find.id, updateLeadDto);
+    return find.id;
   }
 
   async remove(id: number) {

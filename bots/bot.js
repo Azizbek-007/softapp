@@ -16,15 +16,13 @@ bot.start(async (ctx) => {
         var data = JSON.stringify({
         "user_id": ctx.from.id.toString(),
         "FIO": ctx.from.first_name + " " + ctx.from.last_name,
-        "instrument": Number(instrument),
-        "comment": "telegram bot /start",
+        "instrument": instrument,
         "status": 0,
         });
     }else{
         var data = JSON.stringify({
             "user_id": ctx.from.id.toString(),
             "FIO": ctx.from.first_name + " " + ctx.from.last_name,
-            "comment": "telegram bot /start",
             "status": 0,
         });
     }
@@ -40,7 +38,7 @@ bot.start(async (ctx) => {
     .then(res => {
         axios({
             method: "patch",
-            url: `http://localhost:5000/api/v1/instrument/${Number(instrument)}`,
+            url: `http://localhost:5000/api/v1/instrument/${res.data.instrument}`,
             headers
         })
         .catch(error => {
@@ -49,63 +47,40 @@ bot.start(async (ctx) => {
     })
     .catch(error => {
         console.log(error.response.data.error)
-        });
+    });
 
     await ctx.reply("Asslawma Aleykum ulli ma'rtebelim nomerin'izdi jazip qaldirin': ")
     
 });
 
 
-bot.command("course", (ctx) => {
-    var config = {
-        method: 'get',
-        url: 'http://localhost:5000/api/v1/course',
-        headers
-      };
-      
-    axios(config)
-      .then(function (response) {
-        let keyboard = [];
-        let a = [];
-        let data = response.data
-        data.map(element => {
-            keyboard.push({text: element.name, callback_data: `Course=${element.id}`})
-        });
-
-        for (let index = 0; index < keyboard.length; index+=2) {
-                    a.push(keyboard.slice(index, index + 2))
-        }
-
-        ctx.reply("Courses", { reply_markup: JSON.stringify({ inline_keyboard: a }) });
-      })
-      .catch((error) => {
-        console.log(error.response.data.error);
-        ctx.reply("Kurslar tabilmadi")
-      })    
-})
-
-
-bot.action(/^Course=(\d+)$/, (ctx) => {
+bot.action(/Course=([1-9]+)=([1-9]+)$/, (ctx) => {
     let _data = ctx.callbackQuery.data.split('=');
-    if (_data.length == 2) {
-      
+    if (_data.length == 3) {
+      console.log(_data)
         axios({
-            method: 'get',
+            method: 'patch',
             url: `http://localhost:5000/api/v1/course/${_data[1]}`,
             headers
         })
         .then(function (response) {
-            var data = JSON.stringify({
-                "user_id": `${ctx.from.id}`,
-                "comment": `course ${response.data.name}`,
-                "status": 1,
-            
-            });
-            axios({
-                method: 'patch',
-                url: 'http://localhost:5000/api/v1/lead/',
+           
+              var config = {
+                method: 'post',
+                url: 'http://localhost:5000/api/v1/order',
                 headers,
-                data
+                data : JSON.stringify({
+                    "lead": Number(_data[2]),
+                    "course": Number(_data[1])
+                  })
+              };
+              
+              axios(config)
+              .then(function (response) {
+                console.log(JSON.stringify(response.data));
+              })
+              .catch(function (error) {
+                console.log(error);
               })
               .then(function (response) {
                 return ctx.reply('Siz benen tez arada baylanisamiz');
@@ -133,12 +108,11 @@ bot.on('text', (ctx) => {
             headers,
             data: JSON.stringify({
                 "user_id": `${ctx.from.id}`,
-                "comment": `course set phone number`,
                 "phone": text
             
             })
           })
-          .then(function (response) {
+          .then(function (resp) {
             axios({
                 method: 'get',
                 url: 'http://localhost:5000/api/v1/course',
@@ -149,12 +123,13 @@ bot.on('text', (ctx) => {
                 let a = [];
                 let data = response.data
                 data.map(element => {
-                    keyboard.push({text: element.name, callback_data: `Course=${element.id}`})
+                    keyboard.push({text: element.name, callback_data: `Course=${element.id}=${resp.data}`})
                 });
         
                 for (let index = 0; index < keyboard.length; index+=2) {
                             a.push(keyboard.slice(index, index + 2))
                 }
+                console.log(a)
         
                 ctx.reply("Courses", { reply_markup: JSON.stringify({ inline_keyboard: a }) });
               })
