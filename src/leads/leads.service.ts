@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from 'src/course/entities/course.entity';
 import { IsNull, Not, Repository } from 'typeorm';
@@ -19,7 +19,11 @@ export class LeadsService {
       await form_lead.save()
       return form_lead;
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      if (error.code == 'ER_DUP_ENTRY') {
+        throw new ConflictException('User id already exists');
+      } else {
+        throw new InternalServerErrorException();
+      }
     }  
   }
 

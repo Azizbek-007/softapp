@@ -37,7 +37,8 @@ export class InstrumentService {
       throw new NotFoundException();
     }
     await this.InstrumentRepository.update(id, {
-      clicked: one_link.clicked + 1
+      clicked: one_link.clicked + 1,
+      distribution: one_link.price/one_link.clicked+1,
     });
   }
 

@@ -4,12 +4,12 @@ import { Order } from "src/order/entities/order.entity";
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { LeadsStatus } from "../role.enum";
 
-@Entity('leads')
+@Entity('leads_cm')
 export class Lead extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ unique: true })
     user_id: string;
 
     @Column()

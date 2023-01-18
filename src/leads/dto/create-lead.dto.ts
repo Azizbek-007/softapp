@@ -10,7 +10,6 @@ export class CreateLeadDto {
     @IsString()
     FIO: string;
 
-    @IsPhoneNumber('UZ')
     phone: string;
 
     @IsEnum(LeadsStatus)

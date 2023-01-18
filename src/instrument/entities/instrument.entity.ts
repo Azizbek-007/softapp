@@ -18,6 +18,9 @@ export class Instrument extends BaseEntity {
     @Column({default: 0})
     clicked: number;
 
+    @Column()
+    distribution: number;
+    
     @OneToMany(() => Lead, (lead) => lead.instrument)
     leads: Lead[];
 
