@@ -1,7 +1,7 @@
 import { Course } from "src/course/entities/course.entity";
 import { Instrument } from "src/instrument/entities/instrument.entity";
 import { Order } from "src/order/entities/order.entity";
-import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, Column, CreateDateColumn, DatabaseType, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { LeadsStatus } from "../role.enum";
 
 @Entity('leads_cm')
@@ -31,6 +31,8 @@ export class Lead extends BaseEntity {
     @OneToMany(() => Order, (order) => order.lead)
     order: Order[];
 
-    @CreateDateColumn({ name: 'created_at'})
+
+    @CreateDateColumn({ name: 'created_at',  type: 'datetime'})
     createdAt: Date;
+
 }

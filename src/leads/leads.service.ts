@@ -1,7 +1,8 @@
 import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { from } from 'rxjs';
 import { Course } from 'src/course/entities/course.entity';
-import { IsNull, Not, Repository } from 'typeorm';
+import { Between, IsNull, Not, Repository } from 'typeorm';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { Lead } from './entities/lead.entity';
@@ -27,12 +28,24 @@ export class LeadsService {
     }  
   }
 
-  async findAll() {
-    let find = await this.LeadRepository.find();
-    if (find.length == 0) {
-      throw new NotFoundException();
+  async findAll(querys) {
+    if(querys.from && querys.to) {
+
+      let find =  this.LeadRepository.createQueryBuilder('leads_cm')
+      .where(`leads_cm.created_at >= '${querys.from}' AND leads_cm.created_at <= '${querys.to}'`)
+      .getMany()
+      if (find == null) {
+        throw new NotFoundException();
+      }
+      return find
+
+    }else {
+      let find = await this.LeadRepository.find();
+      if (find.length == 0) {
+        throw new NotFoundException();
+      }
+      return find;
     }
-    return find;
   }
 
   async findOne(user_id: string) {
@@ -45,7 +58,6 @@ export class LeadsService {
 
   async update(id: number, updateLeadDto: UpdateLeadDto) {
     let lead_id = id || null;
-    console.log(updateLeadDto)
     let find = await this.LeadRepository.findOne({
       where: [
         { id: lead_id },

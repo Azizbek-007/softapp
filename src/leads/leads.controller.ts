@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
@@ -15,8 +15,8 @@ export class LeadsController {
   }
 
   @Get()
-  findAll() {
-    return this.leadsService.findAll();
+  findAll(@Query() querys) {
+    return this.leadsService.findAll(querys);
   }
 
   @Get(':user_id')

@@ -5,15 +5,21 @@ import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 import { Instrument } from './entities/instrument.entity';
 import { generate } from 'short-uuid';
+import { Setting } from 'src/setting/entities/setting.entity';
 
 @Injectable()
 export class InstrumentService {
   constructor (
-    @InjectRepository(Instrument) private InstrumentRepository: Repository<Instrument>
+    @InjectRepository(Instrument) private InstrumentRepository: Repository<Instrument>,
+    @InjectRepository(Setting)  
+    private SettingRepository: Repository<Setting>
   ) {}
 
   async create(createInstrumentDto: CreateInstrumentDto) { 
-    createInstrumentDto.link = generate(); 
+    let bot_info = await this.SettingRepository.findOneBy({ id: 1 });
+    let hash_uuid = generate();
+    createInstrumentDto.link = bot_info.bot_username + "?start=" + hash_uuid;
+    createInstrumentDto.code = hash_uuid;
     let new_link = this.InstrumentRepository.create(createInstrumentDto);
     await new_link.save();
     return new_link;
@@ -47,6 +53,6 @@ export class InstrumentService {
     if (one_link == null) {
       throw new NotFoundException();
     }
-    await this.InstrumentRepository.remove(one_link);
+    await one_link.softRemove();
   }
 }

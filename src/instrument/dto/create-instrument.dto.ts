@@ -7,5 +7,7 @@ export class CreateInstrumentDto {
     @IsNumber()
     price: number;
 
-    link: string
+    link: string;
+
+    code: string;
 }

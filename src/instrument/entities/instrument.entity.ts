@@ -1,5 +1,5 @@
 import { Lead } from "src/leads/entities/lead.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('instruments')
 export class Instrument extends BaseEntity {
@@ -13,12 +13,15 @@ export class Instrument extends BaseEntity {
     link: string;
 
     @Column()
-    price: number;
-
-    @Column({default: 0})
-    clicked: number;
+    code: string;
 
     @Column()
+    price: number;
+
+    @Column({ default: 0 })
+    clicked: number;
+
+    @Column({ default: 0 })
     distribution: number;
     
     @OneToMany(() => Lead, (lead) => lead.instrument)
@@ -26,4 +29,7 @@ export class Instrument extends BaseEntity {
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
+
+    @DeleteDateColumn()
+    deletedAt: Date
 }

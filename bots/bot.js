@@ -9,7 +9,7 @@ const headers = {
 
 bot.start(async (ctx) => {
     let text = ctx.message.text.split(' ');
-    
+
     if(text.length == 2){
         let instrument = text[1];
 
@@ -83,6 +83,7 @@ bot.command("course", (ctx) => {
         ctx.reply("Kurslar tabilmadi")
       })    
 })
+
 
 bot.action(/^Course=(\d+)$/, (ctx) => {
     let _data = ctx.callbackQuery.data.split('=');

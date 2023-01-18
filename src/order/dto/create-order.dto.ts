@@ -4,6 +4,9 @@ import { Course } from "src/course/entities/course.entity";
 import { Lead } from "src/leads/entities/lead.entity";
 
 export class CreateOrderDto{
+    @IsNumber()
     lead: Lead;
+
+    @IsNumber()
     course: Course;
 }
