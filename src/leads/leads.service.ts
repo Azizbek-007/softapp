@@ -36,11 +36,18 @@ export class LeadsService {
   }
 
   async update(id: number, updateLeadDto: UpdateLeadDto) {
-    let find = await this.LeadRepository.findOneBy({ id });
+    let lead_id = id || null;
+    let find = await this.LeadRepository.findOne({
+      where: [
+        { id: lead_id },
+        { user_id: updateLeadDto.user_id }
+      ]
+    });
     if (!find) {
       throw new NotFoundException();
     }
-    await this.LeadRepository.update(id, updateLeadDto);
+    delete updateLeadDto.user_id;
+    await this.LeadRepository.update(find.id, updateLeadDto);
   }
 
   async remove(id: number) {

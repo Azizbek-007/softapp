@@ -20,8 +20,8 @@ export class LeadsController {
   }
 
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLeadDto: UpdateLeadDto) {
+  @Patch(':id?')
+  update(@Param('id') id?: string, @Body() updateLeadDto?: UpdateLeadDto) {
     return this.leadsService.update(+id, updateLeadDto);
   }
 
