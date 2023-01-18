@@ -35,8 +35,17 @@ export class LeadsService {
     return find;
   }
 
+  async findOne(user_id: string) {
+    let find = await this.LeadRepository.findOneBy({ user_id });
+    if (find == null) {
+      throw new NotFoundException();
+    }
+    return find;
+  }
+
   async update(id: number, updateLeadDto: UpdateLeadDto) {
     let lead_id = id || null;
+    console.log(updateLeadDto)
     let find = await this.LeadRepository.findOne({
       where: [
         { id: lead_id },

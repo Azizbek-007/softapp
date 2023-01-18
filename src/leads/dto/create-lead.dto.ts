@@ -1,4 +1,4 @@
-import { IsString, IsPhoneNumber, IsEnum, IsNumber } from 'class-validator';
+import { IsString, IsPhoneNumber, IsEnum, IsNumber, IsOptional } from 'class-validator';
 import { Instrument } from 'src/instrument/entities/instrument.entity';
 import { LeadsStatus } from '../role.enum';
 
@@ -15,6 +15,7 @@ export class CreateLeadDto {
     @IsEnum(LeadsStatus)
     status: LeadsStatus;
 
+    @IsOptional()
     @IsNumber()
     instrument: Instrument;
 

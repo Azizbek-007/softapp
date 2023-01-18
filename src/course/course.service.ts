@@ -25,6 +25,14 @@ export class CourseService {
 
   }
 
+  async findOne(id: number): Promise<Course> {
+    let find = await this.CoureRepository.findOneBy({ id });
+    if (!find) {
+      throw new NotFoundException();
+    }
+    return find;
+  }
+
   async findAll(): Promise<Course[]> {
     let courses = await this.CoureRepository.find();
     if (courses.length == 0) {

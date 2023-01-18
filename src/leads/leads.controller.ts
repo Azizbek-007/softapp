@@ -19,6 +19,10 @@ export class LeadsController {
     return this.leadsService.findAll();
   }
 
+  @Get(':user_id')
+  findOne(@Param('id') user_id: string) {
+    return this.leadsService.findOne(user_id);
+  }
 
   @Patch(':id?')
   update(@Param('id') id?: string, @Body() updateLeadDto?: UpdateLeadDto) {

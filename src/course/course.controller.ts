@@ -20,6 +20,11 @@ export class CourseController {
   }
 
   @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.courseService.findOne(+id);
+  }
+
+  @Get(':id')
   update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
     return this.courseService.update(+id, updateCourseDto);
   }
