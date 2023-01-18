@@ -38,13 +38,15 @@ export class InstrumentService {
   }
 
   async update(id: number, updateInstrumentDto: UpdateInstrumentDto) {
+    console.log(id)
     let one_link = await this.InstrumentRepository.findOneBy({ id });
+
     if (one_link == null) {
       throw new NotFoundException();
     }
-    await this.InstrumentRepository.update(id, {
+    await this.InstrumentRepository.update(one_link.id, {
       clicked: one_link.clicked + 1,
-      distribution: one_link.price/one_link.clicked+1,
+      distribution: one_link.price/(one_link.clicked +1)
     });
   }
 
