@@ -7,13 +7,16 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v2
-    
+
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.3
       with:
         server: ftp.sales-up.uz
         username: Backend@api.sales-up.uz
         password: U6tS{n)Urq6f
+      run: 
+        npm i
+        npm run build
 
 
   
