@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { from } from 'rxjs';
 import { Course } from 'src/course/entities/course.entity';
 import { Instrument } from 'src/instrument/entities/instrument.entity';
-import { Between, IsNull, Not, Repository } from 'typeorm';
+import { Between, IsNull, Like, Not, Repository } from 'typeorm';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { Lead } from './entities/lead.entity';
@@ -33,29 +33,46 @@ export class LeadsService {
     }  
   }
 
-  async findAll(querys) {
-    if(querys.from && querys.to) {
-      let find =  this.LeadRepository.createQueryBuilder('leads_cm')
-      .where(`leads_cm.created_at >= '${querys.from}' AND leads_cm.created_at <= '${querys.to}'`)
-      .getMany()
-      if (find == null) {
-        throw new NotFoundException();
-      }
-      return find
+  async findAll(query) {
+    // if(querys.from && querys.to) {
+    //   let find =  this.LeadRepository.createQueryBuilder('leads_cm')
+    //   .where(`leads_cm.created_at >= '${querys.from}' AND leads_cm.created_at <= '${querys.to}'`)
+    //   .getMany()
+    //   if (find == null) {
+    //     throw new NotFoundException();
+    //   }
+    //   return find
 
-    }else if (querys.name && querys.phone) {
-      let find = await this.LeadRepository.findBy({ FIO: querys.name, phone: '+'+querys.phone });
-      if (find.length == 0) {
-        throw new NotFoundException();
-      }
-      return find;
-    }
+    // }else if (querys.name && querys.phone) {
+    //   let find = await this.LeadRepository.findBy({ FIO: querys.name, phone: '+'+querys.phone });
+    //   if (find.length == 0) {
+    //     throw new NotFoundException();
+    //   }
+    //   return find;
+    // }
 
-    let find = await this.LeadRepository.find();
-    if (find.length == 0) {
+    const take = query.take || 10
+    const skip = query.skip || 0
+    const keyword = query.name || ''
+
+   
+    const [data, total] = await this.LeadRepository.findAndCount(
+        {
+          where: { 
+            FIO: Like('%' + keyword + '%') }, 
+            order: { FIO: "DESC" 
+          },
+          take: take,
+          skip: skip
+        }
+    );
+
+
+    if (data.length == 0) {
       throw new NotFoundException();
     }
-    return find;
+
+    return {data, total};
     
   }
 
