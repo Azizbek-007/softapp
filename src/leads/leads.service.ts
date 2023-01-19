@@ -19,6 +19,7 @@ export class LeadsService {
   async create(createLeadDto: CreateLeadDto) {
     let inst_hash = createLeadDto.instrument;
     let inst = await this.InstrumentRepository.findOneBy({ code: inst_hash })
+    console.log(inst.id)
     createLeadDto.instrument = inst.id;
     let form_lead = this.LeadRepository.create(createLeadDto);
     try {
@@ -34,38 +35,22 @@ export class LeadsService {
   }
 
   async findAll(query) {
-    // if(querys.from && querys.to) {
-    //   let find =  this.LeadRepository.createQueryBuilder('leads_cm')
-    //   .where(`leads_cm.created_at >= '${querys.from}' AND leads_cm.created_at <= '${querys.to}'`)
-    //   .getMany()
-    //   if (find == null) {
-    //     throw new NotFoundException();
-    //   }
-    //   return find
-
-    // }else if (querys.name && querys.phone) {
-    //   let find = await this.LeadRepository.findBy({ FIO: querys.name, phone: '+'+querys.phone });
-    //   if (find.length == 0) {
-    //     throw new NotFoundException();
-    //   }
-    //   return find;
-    // }
-
-    const take = query.take || 10
-    const skip = query.skip || 0
-    const keyword = query.name || ''
-
    
+    const take = query.take || 10
+    const page=query.page || 1;
+    const skip= (page-1) * take ;
+    const keyword = query.name || '';
+    const phone = query.phone || '';
+    
     const [data, total] = await this.LeadRepository.findAndCount(
-        {
-          where: { 
-            FIO: Like('%' + keyword + '%') }, 
-            order: { FIO: "DESC" 
-          },
-          take: take,
-          skip: skip
-        }
-    );
+      {
+        where: { FIO: Like('%' + keyword + '%'), phone: Like('%' + phone + '%') },
+        order: { FIO: "DESC" }, 
+
+        take: take,
+        skip: skip
+      }
+  );
 
 
     if (data.length == 0) {
