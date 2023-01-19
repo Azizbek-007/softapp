@@ -35,7 +35,6 @@ export class LeadsService {
 
   async findAll(querys) {
     if(querys.from && querys.to) {
-
       let find =  this.LeadRepository.createQueryBuilder('leads_cm')
       .where(`leads_cm.created_at >= '${querys.from}' AND leads_cm.created_at <= '${querys.to}'`)
       .getMany()
@@ -44,13 +43,13 @@ export class LeadsService {
       }
       return find
 
-    }else {
-      let find = await this.LeadRepository.find();
+    }
+      let find = await this.LeadRepository.findBy({ FIO: querys.name, phone: '+'+querys.phone });
       if (find.length == 0) {
         throw new NotFoundException();
       }
       return find;
-    }
+    
   }
 
   async findOne(user_id: string) {

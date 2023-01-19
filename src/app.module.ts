@@ -10,6 +10,7 @@ import { SettingModule } from './setting/setting.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 
 @Module({
@@ -18,6 +19,9 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRoot(TypeOrmConfig),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'bots'),
+    }),
+    MulterModule.register({
+      dest: '../uploads',
     }),
     CourseModule,
     LeadsModule,

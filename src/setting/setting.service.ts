@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException} from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateSettingDto } from './dto/create-setting.dto';
@@ -7,6 +7,7 @@ import { Setting } from './entities/setting.entity';
 const fse = require('fs-extra')
 import axios from 'axios';
 import path from 'path';
+import { SendMessageDto } from './dto/send-message.dto';
 
 @Injectable()
 export class SettingService {
@@ -16,7 +17,7 @@ export class SettingService {
     ) {}
 
   async create(createSettingDto: CreateSettingDto): Promise<void> {
-    let find_bot = await this.SettingRepository.findOneBy({ bot_token: createSettingDto.bot_token });
+    let find_bot = await this.SettingRepository.find();
     if (find_bot) throw new ConflictException("bot exist") 
 
     try {
@@ -34,7 +35,7 @@ export class SettingService {
       await new_bot.save() 
 
     } catch (error) {
-      if (error.code == 'ERR_BAD_REQUEST') throw new UnauthorizedException(error.message);
+      if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
     }
     
   }
@@ -52,9 +53,9 @@ export class SettingService {
 
     try {
       await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?remove`);
-      const response = await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?url=${tg_bot.path}`);
+      await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?url=${tg_bot.path}`);
     } catch (error) {
-      if (error.code == 'ERR_BAD_REQUEST') throw new UnauthorizedException(error.message);
+      if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
     }
   }
 
@@ -68,7 +69,16 @@ export class SettingService {
       await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?remove`); 
       await this.SettingRepository.remove(tg_bot);
     } catch (error) {
-      if (error.code == 'ERR_BAD_REQUEST') throw new UnauthorizedException(error.message);
+      if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
     }
+  }
+
+  async send_message (sendMessageDto: SendMessageDto) {
+    let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
+    try {
+      await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/sendmessage?chat_id=5356014595&text=${sendMessageDto.message}&parse_mode=html`) 
+    } catch (error) {
+      if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
+    } 
   }
 }
