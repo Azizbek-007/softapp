@@ -24,7 +24,7 @@ export class SettingService {
       const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
 
       let data = response.data;
-      let to_path = process.cwd() + `../../bots.sales-up.uz/${data.result?.id}.js`
+      let to_path = process.cwd() + `../../../bots.sales-up.uz/${data.result?.id}.js`
       fse.copySync(process.cwd()+'/bots/bot.js', to_path)
       createSettingDto.path = to_path;
       createSettingDto.bot_username = 'https://t.me/'+data.result?.username;
