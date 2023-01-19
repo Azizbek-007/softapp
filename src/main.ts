@@ -5,7 +5,9 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['debug', 'error', 'verbose', 'warn']
+    logger: ['debug', 'error', 'verbose', 'warn'],
+    bodyParser: true,
+    cors: true
   });
 
   app.setGlobalPrefix('api/v1');

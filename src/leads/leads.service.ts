@@ -41,16 +41,17 @@ export class LeadsService {
     const skip= (page-1) * take ;
     const keyword = query.name || '';
     const phone = query.phone || '';
-    
+
     const [data, total] = await this.LeadRepository.findAndCount(
       {
-        where: { FIO: Like('%' + keyword + '%'), phone: Like('%' + phone + '%') },
+        select: {},
+        where: { FIO: Like('%' + keyword + '%') },
         order: { FIO: "DESC" }, 
 
         take: take,
         skip: skip
       }
-  );
+    );
 
 
     if (data.length == 0) {
@@ -58,7 +59,6 @@ export class LeadsService {
     }
 
     return {data, total};
-    
   }
 
   async findOne(user_id: string) {
@@ -93,3 +93,5 @@ export class LeadsService {
     await this.LeadRepository.remove(find);
   }
 }
+
+
