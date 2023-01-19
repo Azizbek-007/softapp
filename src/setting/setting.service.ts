@@ -18,7 +18,7 @@ export class SettingService {
 
   async create(createSettingDto: CreateSettingDto): Promise<void> {
     let find_bot = await this.SettingRepository.find();
-    if (find_bot) throw new ConflictException("bot exist") 
+    if (find_bot.length != 0) throw new ConflictException("bot exist") 
 
     try {
       const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)

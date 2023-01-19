@@ -43,12 +43,19 @@ export class LeadsService {
       }
       return find
 
-    }
+    }else if (querys.name && querys.phone) {
       let find = await this.LeadRepository.findBy({ FIO: querys.name, phone: '+'+querys.phone });
       if (find.length == 0) {
         throw new NotFoundException();
       }
       return find;
+    }
+
+    let find = await this.LeadRepository.find();
+    if (find.length == 0) {
+      throw new NotFoundException();
+    }
+    return find;
     
   }
 
