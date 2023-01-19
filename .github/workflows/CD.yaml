@@ -14,9 +14,6 @@ jobs:
         server: ftp.sales-up.uz
         username: Backend@api.sales-up.uz
         password: U6tS{n)Urq6f
-      run:
-        npm i
-        npm run build
 
 
   
