@@ -10,6 +10,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true}));
   
+  // render
   await app.listen(5000, () => console.log("🚀Listen on port 5000 🚀"));
 }
 bootstrap();
