@@ -17,9 +17,6 @@ import { MulterModule } from '@nestjs/platform-express';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(TypeOrmConfig),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'bots'),
-    }),
     MulterModule.register({
       dest: '../uploads',
     }),
