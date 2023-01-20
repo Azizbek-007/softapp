@@ -41,15 +41,10 @@ export class SettingController {
       cb(null, true);
     },
   }))
-  sendMesage(@UploadedFile(
-    new ParseFilePipe({
-    validators: [
-      new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-      new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 4 }),
-    ],
-  }),) file: Express.Multer.File, @Body() sendMessageDto) {
+
+  sendMesage(@UploadedFile() file: Express.Multer.File, @Body() sendMessageDto: SendMessageDto) {
     console.log(file)
     console.log(sendMessageDto)
-    // return this.settingService.send_message(sendMessageDto);
+    return this.settingService.send_message(sendMessageDto);
   }
 }

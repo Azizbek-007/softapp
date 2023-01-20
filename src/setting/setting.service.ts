@@ -18,7 +18,7 @@ export class SettingService {
 
   async create(createSettingDto: CreateSettingDto): Promise<void> {
     let find_bot = await this.SettingRepository.find();
-    // if (find_bot.length != 0) throw new ConflictException("bot exist") 
+    if (find_bot.length != 0) throw new ConflictException("bot exist") 
 
     try {
       const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
@@ -73,9 +73,21 @@ export class SettingService {
   }
 
   async send_message (sendMessageDto: SendMessageDto) {
+    sendMessageDto.user_id.replace(' ', '');
+    var user_id_array = sendMessageDto.user_id.split(',')
     let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
     try {
-      await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/sendmessage?chat_id=5356014595&text=${sendMessageDto.message}&parse_mode=html`) 
+      let c = 0
+
+      for await (const num of user_id_array) {
+        try {
+          await axios.get(`https://api.telegram.org/bot5800302267:AAEDqDZOxrWfxwaTtQviRRSWaMHd5ludg0o/sendmessage?chat_id=${num}&text=${sendMessageDto.message}&parse_mode=html`)     
+          c +=1;
+        } catch (error) {
+          console.log('no send')
+        }
+      }
+      return {send: c}
     } catch (error) {
       if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
     } 
