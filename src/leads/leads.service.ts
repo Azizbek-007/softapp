@@ -59,21 +59,6 @@ export class LeadsService {
       }
     );
 
-    // const users = await this.LeadRepository
-    //      .createQueryBuilder('leads_cm')
-    //      .where('leads_cm.FIO LIKE :name', {name: '%' + keyword + '%'})
-    //      .andWhere('leads_cm.user_id LIKE :user_id', {user_id: '%' + user_id + '%'})
-    //      .andWhere('leads_cm.phone LIKE :phone', {phone: '%' + phone + '%'})
-
-
-    //     .andWhere('leads_cm.created_at >= :startDate', {startDate: from_date})
-    //     .andWhere('leads_cm.created_at <= :endDate', {endDate: to_Date})
-    //     .getMany();
-
-    // return users;
-
- 
-
     if (data.length == 0) {
       throw new NotFoundException();
     }

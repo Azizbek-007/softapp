@@ -48,16 +48,13 @@ export class OrderService {
     const phone = query.phone; 
     const from_date = query.from;
     const to_Date = query.to
+
     if (take >= 0 && page == 0) throw new BadRequestException("page should not be equal to 0");
      
     try {
       const [data, total] = await this.OrderRepository.findAndCount(
         {
-          where: [ 
-            { FIO: Like('%' + name + '%') }, 
-            { phone: Like('%' + phone + '%') },
-            {createdAt: Between(from_date, to_Date)}
-          ],
+          where: { FIO: Like('%' + name + '%'), phone: Like('%' + phone + '%'), createdAt: Between(from_date, to_Date) }, 
 
           take: take,
           skip: skip
