@@ -33,7 +33,7 @@ export class LeadsService {
       } else {
         throw new InternalServerErrorException();
       }
-    }  
+    }   
   }
 
   async findAll(query) {
