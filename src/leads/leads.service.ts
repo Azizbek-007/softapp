@@ -7,6 +7,7 @@ import { Between, IsNull, LessThanOrEqual, Like, MoreThanOrEqual, Not, Raw, Repo
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { Lead } from './entities/lead.entity';
+import { LeadsStatus } from './role.enum';
 
 @Injectable()
 export class LeadsService {
@@ -19,7 +20,7 @@ export class LeadsService {
   async create(createLeadDto: CreateLeadDto) {
     let inst_hash = createLeadDto.instrument;
     let inst = await this.InstrumentRepository.findOneBy({ code: inst_hash })
-    console.log(inst.id)
+    if (inst == null) throw new NotFoundException("Not found instrument");
     createLeadDto.instrument = inst.id;
     let form_lead = this.LeadRepository.create(createLeadDto);
     try {

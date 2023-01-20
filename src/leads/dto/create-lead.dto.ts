@@ -9,10 +9,8 @@ export class CreateLeadDto {
     @IsString()
     FIO: string;
 
+    @IsOptional()
     phone: string;
-
-    @IsEnum(LeadsStatus)
-    status: LeadsStatus;
 
     @IsOptional()
     instrument: any;

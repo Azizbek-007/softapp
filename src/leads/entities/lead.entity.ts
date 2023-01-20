@@ -19,7 +19,7 @@ export class Lead extends BaseEntity {
     phone: string;
 
 
-    @Column('enum', { enum: LeadsStatus})
+    @Column('enum', { enum: LeadsStatus, default: 0})
     status: LeadsStatus;
 
     @Column({ nullable: true }) 
