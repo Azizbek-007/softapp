@@ -43,13 +43,14 @@ export class LeadsService {
     
     const phone = query.phone || '';
     const user_id = query.userid || '';
-    const from_date = query.from || '';
-    const to_Date = query.to || '';
+    const from_date = query.from || '2000-01-01';
+    const to_Date = query.to || '3000-01-01';
     const [data, total] = await this.LeadRepository.findAndCount(
       {
         where:  { 
           FIO: Like('%' + keyword + '%'), 
-          user_id: Like('%' + user_id + '%'), 
+          user_id: Like('%' + user_id + '%'),
+          phone: Like('%' + phone + '%'), 
           createdAt: Between(from_date, to_Date),
         },
         
@@ -65,8 +66,8 @@ export class LeadsService {
     //      .andWhere('leads_cm.phone LIKE :phone', {phone: '%' + phone + '%'})
 
 
-    //     // .orWhere('leads_cm.created_at > :startDate', {startDate: from_date})
-    //     // .andWhere('leads_cm.created_at < :endDate', {endDate: to_Date})
+    //     .andWhere('leads_cm.created_at >= :startDate', {startDate: from_date})
+    //     .andWhere('leads_cm.created_at <= :endDate', {endDate: to_Date})
     //     .getMany();
 
     // return users;
