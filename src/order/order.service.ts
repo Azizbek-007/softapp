@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Lead } from 'src/leads/entities/lead.entity';
 import { Between, IsNull, Like, Not, Repository } from 'typeorm';
@@ -13,22 +13,25 @@ export class OrderService {
     @InjectRepository(Lead) private LeadRepository: Repository<Lead>
   ) {}
 
-  async create(createOrderDto: CreateOrderDto): Promise<Order> {
+  async create(createOrderDto: CreateOrderDto) {
     createOrderDto.lead_course_id = `${createOrderDto.lead}${createOrderDto.course}`
+   
+    let lead = await this.LeadRepository.findOneBy({ id: Number(createOrderDto.lead) })
+    if (lead == null) throw new NotFoundException('Not Found lead')
+    
+    let new_order = this.OrderRepository.create({
+      FIO: lead.FIO,
+      phone: lead.phone,
+      lead: createOrderDto.lead,
+      course: createOrderDto.course,
+      lead_course_id: createOrderDto.lead_course_id
+    });
+    
     try {
-      let lead = await this.LeadRepository.findOneBy({ id: Number(createOrderDto.lead) })
-      if (lead == null) throw new NotFoundException("Not found lead")
-
-      let new_order = this.OrderRepository.create({
-        FIO: lead.FIO,
-        phone: lead.phone,
-        lead: createOrderDto.lead,
-        course: createOrderDto.course,
-        lead_course_id: createOrderDto.lead_course_id
-      });
       await new_order.save();
       await this.LeadRepository.update(Number(createOrderDto.lead), {status: 1})
-      return new_order;
+      throw new HttpException(new_order, HttpStatus.OK)
+    
     } catch (error) {
       if (error['code'] == 'ER_NO_REFERENCED_ROW_2') {
         throw new NotFoundException("Not found course or lead id " + createOrderDto.course);
@@ -36,7 +39,6 @@ export class OrderService {
       if (error['code'] == 'ER_DUP_ENTRY'){
         throw new ConflictException();
       }
-      throw new InternalServerErrorException(error);
     }
   }
 
