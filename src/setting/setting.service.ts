@@ -18,7 +18,23 @@ export class SettingService {
 
   async create(createSettingDto: CreateSettingDto): Promise<void> {
     let find_bot = await this.SettingRepository.findOneBy({ id:1 });
-    if (find_bot != null) throw new ConflictException("bot exist") 
+    if (find_bot != null) {
+      if (find_bot.bot_token != null) throw new ConflictException("bot exist")
+      try {
+        const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
+        let data = response.data;
+        let to_path = process.cwd() + `../../../bots.sales-up.uz/bots/${data.result?.id}.js`
+        fse.copySync(process.cwd()+'/bots/bot.js', to_path)
+        createSettingDto.path = to_path;
+        createSettingDto.bot_username = 'https://t.me/'+data.result?.username;
+        createSettingDto.bot_chat_id = data.result?.id;
+        createSettingDto.status = 1;
+        await this.SettingRepository.update(find_bot.id, createSettingDto)
+      } catch (error) {
+        if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message); 
+      }
+    
+    }
 
     try {
       const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
@@ -39,16 +55,16 @@ export class SettingService {
     
   }
 
-  async findAll(): Promise<Setting[]> {
-    let all_bots = await this.SettingRepository.find();
-    if(all_bots.length == 0) throw new NotFoundException();
-    return all_bots;
+  async findAll() {
+    let tg_bot = await this.SettingRepository.findOneBy({id:1});
+    if(tg_bot.bot_token == null) throw new NotFoundException();
+    return tg_bot;
   }
 
   async Webhook_bot(id: number): Promise<void> {
     
     let tg_bot = await this.SettingRepository.findOneBy({ id });
-    if (tg_bot == null) throw new NotFoundException("ID");
+    if (tg_bot.bot_token == null) throw new NotFoundException("ID");
 
     try {
       await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?remove`);
@@ -60,13 +76,11 @@ export class SettingService {
 
 
 
-  async remove(id: number): Promise<void> {
-    let tg_bot = await this.SettingRepository.findOneBy({ id });
+  async remove(): Promise<void> {
+    let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
     if (tg_bot == null) throw new NotFoundException("ID");
-
     try {
-      await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?remove`); 
-      await this.SettingRepository.remove(tg_bot);
+      await this.SettingRepository.update(tg_bot.id, { bot_token: null, bot_username: null, bot_chat_id: null, path: null }); 
     } catch (error) {
       if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
     }

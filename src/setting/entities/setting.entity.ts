@@ -6,16 +6,16 @@ export class Setting extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ nullable: true })
     bot_token: string;
 
-    @Column()
+    @Column({ nullable: true })
     bot_username: string;
 
-    @Column()
+    @Column({ nullable: true })
     bot_chat_id: string;
 
-    @Column({ select: false })
+    @Column({ select: false, nullable:true })
     path: string;
 
     @Column('enum', {enum: LeadsStatus })

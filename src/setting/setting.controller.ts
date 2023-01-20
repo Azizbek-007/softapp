@@ -26,9 +26,9 @@ export class SettingController {
   //   return this.settingService.Webhook_bot();
   // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.settingService.remove(+id);
+  @Delete()
+  remove() {
+    return this.settingService.remove();
   }
 
   @Post('sendMessage')
