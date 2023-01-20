@@ -25,7 +25,7 @@ export class Lead extends BaseEntity {
     @Column({ nullable: true }) 
     comment: string;
 
-    @ManyToOne(() => Instrument, (instrument) => instrument.leads, { eager: true })
+    @ManyToOne(() => Instrument, (instrument) => instrument.leads, { eager: true, nullable:true })
     instrument: Instrument;
 
     @ManyToOne(() => Order, (order) => order.lead, { cascade: true })
