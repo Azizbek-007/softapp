@@ -17,6 +17,7 @@ export class OrderService {
     createOrderDto.lead_course_id = `${createOrderDto.lead}${createOrderDto.course}`
     try {
       let lead = await this.LeadRepository.findOneBy({ id: Number(createOrderDto.lead) })
+      if (lead == null) throw new NotFoundException("Not found lead")
 
       let new_order = this.OrderRepository.create({
         FIO: lead.FIO,
