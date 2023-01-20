@@ -8,6 +8,7 @@ const fse = require('fs-extra')
 import axios from 'axios';
 import path from 'path';
 import { SendMessageDto } from './dto/send-message.dto';
+import fs from 'fs';
 
 @Injectable()
 export class SettingService {
@@ -80,6 +81,7 @@ export class SettingService {
     let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
     if (tg_bot == null) throw new NotFoundException("ID");
     try {
+      fs.unlinkSync(tg_bot.path);
       await this.SettingRepository.update(tg_bot.id, { bot_token: null, bot_username: null, bot_chat_id: null, path: null }); 
     } catch (error) {
       if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
