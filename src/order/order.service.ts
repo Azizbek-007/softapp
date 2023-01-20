@@ -1,7 +1,7 @@
-import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Lead } from 'src/leads/entities/lead.entity';
-import { IsNull, Not, Repository } from 'typeorm';
+import { IsNull, Like, Not, Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
@@ -15,8 +15,16 @@ export class OrderService {
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
     createOrderDto.lead_course_id = `${createOrderDto.lead}${createOrderDto.course}`
-    let new_order = this.OrderRepository.create(createOrderDto);
     try {
+      let lead = await this.LeadRepository.findOneBy({ id: Number(createOrderDto.lead) })
+
+      let new_order = this.OrderRepository.create({
+        FIO: lead.FIO,
+        phone: lead.phone,
+        lead: createOrderDto.lead,
+        course: createOrderDto.course,
+        lead_course_id: createOrderDto.lead_course_id
+      });
       await new_order.save();
       await this.LeadRepository.update(Number(createOrderDto.lead), {status: 1})
       return new_order;
@@ -31,13 +39,33 @@ export class OrderService {
     }
   }
 
-  async findAll(): Promise<Order[]> {
-    let find_order =  await this.OrderRepository.find();
-  
-    if(find_order.length == 0) {
-      throw new NotFoundException()
-    };
-    return find_order;
+  async findAll(query) {
+
+    const take = query.take || 10
+    const page=query.page || 1;
+    const skip = (page-1) * take ;
+    const name = query.name || '';
+    const phone = query.phone; 
+
+    if (take >= 0 && page == 0) throw new BadRequestException("page should not be equal to 0");
+     
+    try {
+      const [data, total] = await this.OrderRepository.findAndCount(
+        {
+          where: [ 
+            { FIO: Like('%' + name + '%') }, 
+            { phone: Like('%' + phone + '%') }
+          ],
+
+          take: take,
+          skip: skip
+        }
+      );
+     
+      return {data, total};   
+    } catch (error) {
+      throw new InternalServerErrorException(error.message)
+    }
   }
 
   findOne(id: number): string {

@@ -34,8 +34,11 @@ export class Lead extends BaseEntity {
     @ManyToOne(() => Order, (order) => order.lead, { cascade: true })
     order: Order;
 
-    
-    @CreateDateColumn({ name: 'created_at',  type: 'datetime'})
+   
+
+    @CreateDateColumn({ name: 'created_at', default: new Date((new Date()).getTime() - new Date().getTimezoneOffset() * 60000)
+    .toISOString()
+    .replace(/(.*)T(.*)\..*/,'$1 $2')})
     createdAt: Date;
 
 

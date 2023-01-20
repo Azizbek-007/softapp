@@ -41,12 +41,15 @@ export class LeadsService {
     const skip= (page-1) * take ;
     const keyword = query.name || '';
     const phone = query.phone || '';
+    const form = query.form || '';
+    const to_Date = query.to || ''
 
     const [data, total] = await this.LeadRepository.findAndCount(
       {
-        select: {},
-        where: { FIO: Like('%' + keyword + '%') },
-        order: { FIO: "DESC" }, 
+        where: [
+          { FIO: Like('%' + keyword + '%')},
+          { phone: Like('%' + phone + '%') } 
+        ],
 
         take: take,
         skip: skip

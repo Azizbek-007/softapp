@@ -7,7 +7,13 @@ export class Order extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne((type) => Lead, (lead) => lead.order, { eager: true })
+    @Column()
+    FIO: string;
+
+    @Column({ nullable: true })
+    phone: string;
+
+    @ManyToOne((type) => Lead, (lead) => lead.order, {eager: true})
     lead: Lead;
 
     @ManyToOne((type) => Course, (course) => course.order, { eager: true, cascade: true })
