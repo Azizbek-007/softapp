@@ -18,9 +18,8 @@ export class LeadsService {
   ) {}
 
   async create(createLeadDto: CreateLeadDto) {
-    let inst_hash = createLeadDto.instrument || null;
+    let inst = createLeadDto.instrument ?  await this.InstrumentRepository.findOneBy({ code: createLeadDto.instrument });
    
-    let inst = await this.InstrumentRepository.findOneBy({ code: inst_hash })
 
     if (inst == null) throw new NotFoundException("Not found instrument");
     createLeadDto.instrument = inst.id;
