@@ -21,10 +21,10 @@ export class SettingController {
     return this.settingService.findAll();
   }
 
-  @Get('webhook/:id')
-  webhook_bot(@Param('id') id: string) {
-    return this.settingService.Webhook_bot(+id);
-  }
+  // @Get('webhook')
+  // webhook_bot() {
+  //   return this.settingService.Webhook_bot();
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
