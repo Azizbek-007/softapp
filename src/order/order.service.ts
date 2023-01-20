@@ -1,7 +1,7 @@
 import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Lead } from 'src/leads/entities/lead.entity';
-import { IsNull, Like, Not, Repository } from 'typeorm';
+import { Between, IsNull, Like, Not, Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
@@ -46,7 +46,8 @@ export class OrderService {
     const skip = (page-1) * take ;
     const name = query.name || '';
     const phone = query.phone; 
-
+    const from_date = query.from;
+    const to_Date = query.to
     if (take >= 0 && page == 0) throw new BadRequestException("page should not be equal to 0");
      
     try {
@@ -54,7 +55,8 @@ export class OrderService {
         {
           where: [ 
             { FIO: Like('%' + name + '%') }, 
-            { phone: Like('%' + phone + '%') }
+            { phone: Like('%' + phone + '%') },
+            {createdAt: Between(from_date, to_Date)}
           ],
 
           take: take,
