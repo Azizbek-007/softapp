@@ -3,10 +3,7 @@ import { Instrument } from "src/instrument/entities/instrument.entity";
 import { Order } from "src/order/entities/order.entity";
 import { BaseEntity, BeforeInsert, Column, CreateDateColumn, DatabaseType, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { LeadsStatus } from "../role.enum";
-import moment from 'moment';
-import { Transform } from 'class-transformer';
-import format from 'date-fns/format';
-import parseJSON from 'date-fns/parseJSON';
+
 @Entity('leads_cm')
 export class Lead extends BaseEntity {
     @PrimaryGeneratedColumn()

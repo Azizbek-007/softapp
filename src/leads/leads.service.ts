@@ -42,14 +42,17 @@ export class LeadsService {
     const keyword = query.name || '';
     
     const phone = query.phone || '';
-    const user_id = query.user_id;
-    const form = query.form || '';
-    const to_Date = query.to || ''
-
+    const user_id = query.userid || '';
+    const from_date = query.from;
+    const to_Date = query.to;
     const [data, total] = await this.LeadRepository.findAndCount(
       {
-        where: [{user_id: Like('%' + user_id + '%')}, { FIO: Like('%' + keyword + '%')}],
-
+        where: [
+          {user_id: Like('%' + user_id + '%')}, 
+          { FIO: Like('%' + keyword + '%')},
+          {createdAt: Between(from_date, to_Date)}
+        ],
+        
         take: take,
         skip: skip
       }
