@@ -79,7 +79,7 @@ export class SettingService {
 
   async remove(): Promise<void> {
     let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
-    if (tg_bot == null) throw new NotFoundException("ID");
+    if (tg_bot.bot_token == null) throw new NotFoundException("Bot");
     try {
       await this.SettingRepository.update(tg_bot.id, { bot_token: null, bot_username: null, bot_chat_id: null, path: null }); 
       fs.unlinkSync(tg_bot.path);
