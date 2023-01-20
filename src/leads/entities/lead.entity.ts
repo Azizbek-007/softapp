@@ -15,7 +15,7 @@ export class Lead extends BaseEntity {
     @Column()
     FIO: string;
 
-    @Column({ nullable: true})
+    @Column({ default: '0'})
     phone: string;
 
 
