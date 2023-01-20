@@ -39,16 +39,20 @@ export class LeadsService {
     const take = query.take || 10
     const page=query.page || 1;
     const skip= (page-1) * take ;
-    const keyword = query.name || '';
-    const phone = query.phone || '';
-    const form = query.form || '';
+    const name = query.name;
+    const phone = query.phone; 
+    const user_id = query.user_id;
+    const from_date = query.form || '';
     const to_Date = query.to || ''
+    
 
     const [data, total] = await this.LeadRepository.findAndCount(
       {
         where: [
-          { FIO: Like('%' + keyword + '%')},
-          { phone: Like('%' + phone + '%') } 
+          { user_id: Like(`%${user_id}%`) },
+          { FIO: Like(`%${name}%`) },
+          { phone: Like('%' + '+'+phone + '%') },
+          {createdAt: Between(from_date, to_Date)}
         ],
 
         take: take,
