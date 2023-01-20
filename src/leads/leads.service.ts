@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { from } from 'rxjs';
 import { Course } from 'src/course/entities/course.entity';
 import { Instrument } from 'src/instrument/entities/instrument.entity';
-import { Between, IsNull, Like, Not, Repository } from 'typeorm';
+import { Between, IsNull, LessThanOrEqual, Like, MoreThanOrEqual, Not, Raw, Repository } from 'typeorm';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { Lead } from './entities/lead.entity';
@@ -43,21 +43,35 @@ export class LeadsService {
     
     const phone = query.phone || '';
     const user_id = query.userid || '';
-    const from_date = query.from;
-    const to_Date = query.to;
+    const from_date = query.from || '';
+    const to_Date = query.to || '';
     const [data, total] = await this.LeadRepository.findAndCount(
       {
-        where: [
-          {user_id: Like('%' + user_id + '%')}, 
-          { FIO: Like('%' + keyword + '%')},
-          {createdAt: Between(from_date, to_Date)}
-        ],
+        where:  { 
+          FIO: Like('%' + keyword + '%'), 
+          user_id: Like('%' + user_id + '%'), 
+          createdAt: Between(from_date, to_Date),
+        },
         
         take: take,
         skip: skip
       }
     );
 
+    // const users = await this.LeadRepository
+    //      .createQueryBuilder('leads_cm')
+    //      .where('leads_cm.FIO LIKE :name', {name: '%' + keyword + '%'})
+    //      .andWhere('leads_cm.user_id LIKE :user_id', {user_id: '%' + user_id + '%'})
+    //      .andWhere('leads_cm.phone LIKE :phone', {phone: '%' + phone + '%'})
+
+
+    //     // .orWhere('leads_cm.created_at > :startDate', {startDate: from_date})
+    //     // .andWhere('leads_cm.created_at < :endDate', {endDate: to_Date})
+    //     .getMany();
+
+    // return users;
+
+ 
 
     if (data.length == 0) {
       throw new NotFoundException();
