@@ -45,9 +45,10 @@ export class OrderService {
     const page=query.page || 1;
     const skip = (page-1) * take ;
     const name = query.name || '';
-    const phone = query.phone; 
-    const from_date = query.from;
-    const to_Date = query.to
+    const phone = query.phone || '';
+     
+    const from_date = query.from || '2000-01-01';
+    const to_Date = query.to || '3000-01-01';
 
     if (take >= 0 && page == 0) throw new BadRequestException("page should not be equal to 0");
      
