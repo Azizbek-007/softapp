@@ -18,7 +18,7 @@ export class LeadsService {
   ) {}
 
   async create(createLeadDto: CreateLeadDto) {
-    let inst = createLeadDto.instrument ?  await this.InstrumentRepository.findOneBy({ code: createLeadDto.instrument });
+    let inst = createLeadDto.instrument ?  await this.InstrumentRepository.findOneBy({ code: createLeadDto.instrument }) : null
    
 
     if (inst == null) throw new NotFoundException("Not found instrument");
