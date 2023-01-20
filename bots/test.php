@@ -1,3 +1,5 @@
+<?php 
+$token = "5766145710:AAHTnL7XRDYbSrvlvX0F2z--QpN45Rlia8E";
 
 define('bot_token', $token);
 
