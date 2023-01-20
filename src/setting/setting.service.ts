@@ -8,8 +8,8 @@ const fse = require('fs-extra')
 import axios from 'axios';
 import path from 'path';
 import { SendMessageDto } from './dto/send-message.dto';
-import fs from 'fs';
-
+var fs = require('fs')
+var Client = require('ftp');
 @Injectable()
 export class SettingService {
   constructor(
@@ -19,14 +19,43 @@ export class SettingService {
 
   async create(createSettingDto: CreateSettingDto): Promise<void> {
     let find_bot = await this.SettingRepository.findOneBy({ id:1 });
+    let php_file_adress = '/' + process.cwd() + '/bots/bot.php'
+    var c = new Client();
+
     if (find_bot != null) {
+
       if (find_bot.bot_token != null) throw new ConflictException("bot exist")
+      
       try {
         const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
         let data = response.data;
-        let to_path = process.cwd() + `../../../bots.sales-up.uz/bots/${data.result?.id}.js`
-        fse.copySync(process.cwd()+'/bots/bot.js', to_path)
-        createSettingDto.path = to_path;
+        let to_path = `${data.result?.id}.php`
+        let new_php_file_adress = '/' + process.cwd() + '/bots/' + to_path;
+ 
+        fs.readFile(php_file_adress, 'utf8', (err, data) =>{
+          let token = createSettingDto.bot_token;
+          fs.writeFile(new_php_file_adress, `<?php \n$token = "${token}";\n${data}`,'utf8', (err) => console.log(err));
+        });
+
+        c.on('ready', function () {
+            c.list( "/", function (err, list) {
+                if (err) throw err;
+                console.dir(list);
+            });
+            c.put(new_php_file_adress, to_path, function(err) {
+                if (err) throw err;
+                c.end();
+            });
+        });
+        c.connect({
+            host: 'yusupog4.beget.tech',
+            user: 'yusupog4_salesup',
+            password: 'CF*x7bl%',
+        });
+        createSettingDto.path = 'https://intuza.uz/salesup/' + to_path;
+        console.log(createSettingDto.path)
+        await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
+        await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`)
         createSettingDto.bot_username = 'https://t.me/'+data.result?.username;
         createSettingDto.bot_chat_id = data.result?.id;
         createSettingDto.status = 1;
@@ -41,9 +70,34 @@ export class SettingService {
       const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
 
       let data = response.data;
-      let to_path = process.cwd() + `../../../bots.sales-up.uz/bots/${data.result?.id}.js`
-      fse.copySync(process.cwd()+'/bots/bot.js', to_path)
-      createSettingDto.path = to_path;
+      let to_path = `${data.result?.id}.php`
+      let new_php_file_adress = '/' + process.cwd() + '/bots/' + to_path;
+
+
+      fs.readFile(php_file_adress, 'utf8', (err, data) =>{
+        let token = createSettingDto.bot_token;
+        fs.writeFile(new_php_file_adress, `<?php \n$token = "${token}";\n${data}`,'utf8', (err) => console.log(err));
+      });
+
+      c.on('ready', function () {
+        c.list( "/", function (err, list) {
+            if (err) throw err;
+            console.dir(list);
+        });
+        c.put(new_php_file_adress, to_path, function(err) {
+            if (err) throw err;
+            c.end();
+        });
+      });
+      c.connect({
+          host: 'yusupog4.beget.tech',
+          user: 'yusupog4_salesup',
+          password: 'CF*x7bl%',
+      });
+
+      createSettingDto.path = 'https://intuza.uz/salesup/' + to_path;
+      await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
+      await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`)
       createSettingDto.bot_username = 'https://t.me/'+data.result?.username;
       createSettingDto.bot_chat_id = data.result?.id;
       createSettingDto.status = 1;

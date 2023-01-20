@@ -26,7 +26,7 @@ export class OrderService {
       course: createOrderDto.course,
       lead_course_id: createOrderDto.lead_course_id
     });
-    
+
     try {
       await new_order.save();
       await this.LeadRepository.update(Number(createOrderDto.lead), {status: 1})
@@ -78,7 +78,7 @@ export class OrderService {
   async update(id: number, updateOrderDto: UpdateOrderDto) {
     let find_order = await this.OrderRepository.findOneBy({ id });
     if (find_order == null) {
-      throw new NotFoundException();
+      throw new NotFoundException("Not found Order id");
     }
     try {
       await this.OrderRepository.update(id, updateOrderDto);
