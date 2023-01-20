@@ -20,8 +20,7 @@ export class LeadsService {
   async create(createLeadDto: CreateLeadDto) {
     let inst = createLeadDto.instrument ?  await this.InstrumentRepository.findOneBy({ code: createLeadDto.instrument }) : null
    
-
-    if (inst == null) throw new NotFoundException("Not found instrument");
+    // if (inst == null) throw new NotFoundException("Not found instrument");
     createLeadDto.instrument = inst.id;
     let form_lead = this.LeadRepository.create(createLeadDto);
     try {
