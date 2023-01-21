@@ -12,9 +12,7 @@ export class CourseService {
   ) {}
 
   async create(createCourseDto: CreateCourseDto): Promise<Course> {
-    let course = this.CoureRepository.create({
-      name: createCourseDto.name,
-    });
+    let course = this.CoureRepository.create(createCourseDto);
 
     try {
       await course.save();
