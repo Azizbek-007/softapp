@@ -12,7 +12,7 @@ export class Course extends BaseEntity{
 
     @Column({ nullable: true })
     description: string;
-    
+     
     @Column({ default: 0 })
     clicked: number;
 
