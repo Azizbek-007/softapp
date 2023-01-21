@@ -19,7 +19,7 @@ export class SettingService {
 
   async create(createSettingDto: CreateSettingDto): Promise<void> {
     let find_bot = await this.SettingRepository.findOneBy({ id:1 });
-    let php_file_adress = '/' + process.cwd() + '/bots/bot.php'
+    let php_file_adress = process.cwd() + '/bots/bot.php'
     var c = new Client();
 
 
