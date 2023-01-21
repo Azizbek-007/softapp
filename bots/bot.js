@@ -133,7 +133,7 @@ bot.on('text', (ctx) => {
         
                 ctx.reply("Courses", { reply_markup: JSON.stringify({ inline_keyboard: a }) });
               })
-              .catch((error) => {
+              .catch((error) => { 
                 console.log(error.response.data.error);
                 ctx.reply("Kurslar tabilmadi")
               })    

@@ -256,6 +256,14 @@ if (file_get_contents("$chat_id.$bot_id.txt") == "phone") {
     unlink("$chat_id.$bot_id.txt");
 }
 
+if ($text == '/test') {
+    $content = [
+                'chat_id' => $chat_id, 
+                'text' => "Hi Guy", 
+                'parse_mode' => 'markdown',
+            ];
+    Answer($content); 
+}
 
 $menu = [["Kurslar", "Help", "Support"]];
 
