@@ -47,7 +47,7 @@ export class SettingService {
       
       c.connect({
           host: 'yusupog4.beget.tech',
-          user: 'yusupog4_salesup',
+          user: 'yusupog4_backend',
           password: 'CF*x7bl%',
       });
     //   createSettingDto.path = 'https://intuza.uz/salesup/' + to_path;
