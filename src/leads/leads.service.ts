@@ -18,23 +18,8 @@ export class LeadsService {
   ) {}
 
   async create(createLeadDto: CreateLeadDto) {
-    if(createLeadDto.instrument){
-      let inst = await this.InstrumentRepository.findOneBy({ code: createLeadDto.instrument }) || null;
-      if (inst == null) throw new NotFoundException("Not found instrument");
-      createLeadDto.instrument = inst.id;
-      let form_lead = this.LeadRepository.create(createLeadDto);
-      try {
-        await form_lead.save()
-        return form_lead;
-      } catch (error) {
-        if (error.code == 'ER_DUP_ENTRY') {
-          throw new ConflictException('User id already exists');
-        } else {
-          throw new InternalServerErrorException();
-        }
-      }
-    }
-    createLeadDto.instrument == null;
+
+    createLeadDto.instrument = createLeadDto.instrument || null;
     let form_lead = this.LeadRepository.create(createLeadDto);
     try {
       await form_lead.save()
