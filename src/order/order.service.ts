@@ -14,22 +14,21 @@ export class OrderService {
   ) {}
 
   async create(createOrderDto: CreateOrderDto) {
-    createOrderDto.lead_course_id = `${createOrderDto.lead}${createOrderDto.course}`
    
-    let lead = await this.LeadRepository.findOneBy({ id: Number(createOrderDto.lead) })
+    let lead: Lead = await this.LeadRepository.findOneBy({ user_id: createOrderDto.user_id });
     if (lead == null) throw new NotFoundException('Not Found lead')
-    
+    createOrderDto.lead_course_id = `${lead.id}${createOrderDto.course}`
     let new_order = this.OrderRepository.create({
       FIO: lead.FIO,
       phone: lead.phone,
-      lead: createOrderDto.lead,
+      lead: lead,
       course: createOrderDto.course,
       lead_course_id: createOrderDto.lead_course_id
     });
 
     try {
       await new_order.save();
-      await this.LeadRepository.update(Number(createOrderDto.lead), {status: 1})
+      await this.LeadRepository.update(lead.id, {status: 1})
       throw new HttpException(new_order, HttpStatus.OK)
     
     } catch (error) {
