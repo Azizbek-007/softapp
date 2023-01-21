@@ -30,7 +30,7 @@ export class SettingService {
       const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
       let data = response.data;
       let to_path = `${data.result?.id}.php`
-      let new_php_file_adress = '/' + process.cwd() + '/bots/' + to_path;
+      let new_php_file_adress = process.cwd() + '/bots/' + to_path;
 
       fs.readFile(php_file_adress, 'utf8', (err, data) =>{
         let token = createSettingDto.bot_token;
@@ -43,7 +43,7 @@ export class SettingService {
               console.dir(list);
           });
           c.put(new_php_file_adress, to_path, function(err) {
-              if (err) throw err;
+              if (err) throw new InternalServerErrorException(err);
               c.end();
           });
       });
