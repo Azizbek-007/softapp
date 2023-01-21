@@ -11,7 +11,7 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix('api/v1');
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true}));
+  app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false, whitelist: true, transform: true}));
   
   const config = new DocumentBuilder()
     .setTitle('SoftApp')
