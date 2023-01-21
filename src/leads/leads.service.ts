@@ -34,6 +34,7 @@ export class LeadsService {
         }
       }
     }
+    createLeadDto.instrument == null;
     let form_lead = this.LeadRepository.create(createLeadDto);
     try {
       await form_lead.save()
