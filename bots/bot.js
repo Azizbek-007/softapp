@@ -101,7 +101,7 @@ bot.action(/Course=([1-9]+)=([1-9]+)$/, (ctx) => {
 
 bot.on('text', (ctx) => {
     let text = ctx.message.text;
-    if(text.search(/^[+]?998([- ])?(90|91|93|94|95|98|99|33|97|71)([- ])?(\d{3})([- ])?(\d{2})([- ])?(\d{2})$/) != -1) {
+    if(text.search() {
         axios({
             method: 'patch',
             url: 'http://localhost:5000/api/v1/lead/',
