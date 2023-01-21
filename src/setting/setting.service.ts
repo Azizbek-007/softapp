@@ -39,15 +39,12 @@ export class SettingService {
     });
 
       c.on('ready', function () {
-          c.list( "/", function (err: any, list: any) {
-              if (err) throw err;
-              console.dir(list);
-          });
           c.put(new_php_file_adress, to_path, function(err) {
               if (err) throw new InternalServerErrorException(err);
               c.end();
           });
       });
+      
       c.connect({
           host: 'yusupog4.beget.tech',
           user: 'yusupog4_salesup',
