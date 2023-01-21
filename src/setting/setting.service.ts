@@ -54,8 +54,8 @@ export class SettingService {
         });
         createSettingDto.path = 'https://intuza.uz/salesup/' + to_path;
         console.log(createSettingDto.path)
-        await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
-        await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`)
+        // await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
+        // await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`)
         createSettingDto.bot_username = 'https://t.me/'+data.result?.username;
         createSettingDto.bot_chat_id = data.result?.id;
         createSettingDto.status = 1;
@@ -97,8 +97,8 @@ export class SettingService {
       });
 
       createSettingDto.path = 'https://intuza.uz/salesup/' + to_path;
-      await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
-      await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`)
+      // await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
+      // await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`)
       createSettingDto.bot_username = 'https://t.me/'+data.result?.username;
       createSettingDto.bot_chat_id = data.result?.id;
       createSettingDto.status = 1;
