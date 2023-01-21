@@ -20,7 +20,7 @@ export class LeadsController {
   }
 
   @Get(':user_id')
-  findOne(@Param('id') user_id: string) {
+  findOne(@Param('user_id') user_id: string) {
     return this.leadsService.findOne(user_id);
   }
 

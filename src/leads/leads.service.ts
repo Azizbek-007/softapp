@@ -69,7 +69,7 @@ export class LeadsService {
   }
 
   async findOne(user_id: string) {
-    let find = await this.LeadRepository.findOneBy({ user_id });
+    let find = await this.LeadRepository.findOneBy({ user_id: user_id });
     if (find == null) {
       throw new NotFoundException();
     }
