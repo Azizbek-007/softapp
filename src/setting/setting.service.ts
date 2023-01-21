@@ -38,6 +38,7 @@ export class SettingService {
       fs.writeFile(new_php_file_adress, `<?php \n$token = "${token}";\n${data}`,'utf8', (err) => console.log(err));
     });
 
+    var c = new Client();
       c.on('ready', function () {
           c.put(new_php_file_adress, to_path, function(err) {
               if (err) throw new InternalServerErrorException(err);
