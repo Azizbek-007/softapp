@@ -12,7 +12,7 @@ export class Instrument extends BaseEntity {
     @Column()
     link: string;
 
-    @Column()
+    @Column({ nullable: true })
     code: string;
 
     @Column()

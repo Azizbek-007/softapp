@@ -18,9 +18,11 @@ export class LeadsService {
   ) {}
 
   async create(createLeadDto: CreateLeadDto) {
-    createLeadDto.instrument = createLeadDto.instrument ||  null;
-    let inst = await this.InstrumentRepository.findOneBy({ code: createLeadDto.instrument }) || null;
-    createLeadDto.instrument = inst.id;
+    createLeadDto.instrument = createLeadDto.instrument || null;
+
+    if(createLeadDto.instrument) createLeadDto.instrument = await (await this.InstrumentRepository.findOneBy({code: createLeadDto.instrument }))?.id || null;
+
+    
     let form_lead = this.LeadRepository.create(createLeadDto);
     try {
       await form_lead.save()
