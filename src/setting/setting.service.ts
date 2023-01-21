@@ -61,7 +61,7 @@ export class SettingService {
         createSettingDto.status = 1;
         await this.SettingRepository.update(find_bot.id, createSettingDto)
       } catch (error) {
-        return error;
+        // return error;
         if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message); 
       }
     
@@ -106,6 +106,7 @@ export class SettingService {
       await new_bot.save() 
 
     } catch (error) {
+      return error;
       if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
     }
     
