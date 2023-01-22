@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateSupportDto } from './dto/create-support.dto';
@@ -15,8 +15,10 @@ export class SupportService {
     await new_quetion.save();
   }
 
-  findAll() {
-    return `This action returns all support`;
+  async findAll() {
+    let find_all = await this.SupportRepository.findBy({ answer: null });
+    if (find_all.length == 0) throw new NotFoundException();
+    return find_all;
   }
 
   findOne(id: number) {
