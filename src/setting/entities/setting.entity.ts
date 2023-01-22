@@ -15,6 +15,9 @@ export class Setting extends BaseEntity {
     @Column({ nullable: true })
     bot_chat_id: string;
 
+    @Column({ nullable: true })
+    contact: string;
+
     @Column({ select: false, nullable:true })
     path: string;
 

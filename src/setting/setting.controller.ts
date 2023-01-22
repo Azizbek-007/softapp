@@ -5,6 +5,7 @@ import { CreateSettingDto } from './dto/create-setting.dto';
 import { SendMessageDto } from './dto/send-message.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { UpdateSettingDto } from './dto/update-setting.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('setting')
@@ -31,6 +32,10 @@ export class SettingController {
     return this.settingService.remove();
   }
 
+  @Patch()
+  bot_help(@Body() updateDto: UpdateSettingDto) {
+    
+  }
   @Post('sendMessage')
   @UseInterceptors(FileInterceptor('photo', {
     storage: diskStorage({

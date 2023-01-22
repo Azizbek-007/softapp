@@ -108,6 +108,12 @@ export class SettingService {
     
   }
 
+  async add_help_text(dto: UpdateSettingDto) {
+    let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
+    if(tg_bot.bot_token == null) throw new NotFoundException();
+    await this.SettingRepository.update(1, dto);
+  }
+
   async findAll() {
     let tg_bot = await this.SettingRepository.findOneBy({id:1});
     if(tg_bot.bot_token == null) throw new NotFoundException();
