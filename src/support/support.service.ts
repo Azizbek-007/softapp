@@ -25,8 +25,10 @@ export class SupportService {
     return `This action returns a #${id} support`;
   }
 
-  update(id: number, updateSupportDto: UpdateSupportDto) {
-    return `This action updates a #${id} support`;
+  async update(id: number, updateSupportDto: UpdateSupportDto) {
+    let find_ques = await this.SupportRepository.findOneBy({ id });
+    if (find_ques == null) throw new NotFoundException("Not Found Question");
+    await this.SupportRepository.update(find_ques.id, updateSupportDto);
   }
 
   remove(id: number) {
