@@ -55,7 +55,6 @@ function sendAPIRequest($url, array $content, $post = true)
 
 function SendRequest($url, $payload, $req) {
     $curl = curl_init();
-
     curl_setopt_array($curl, array(
     CURLOPT_URL => 'http://api.sales-up.uz/api/v1'.$url,
     CURLOPT_RETURNTRANSFER => true,
@@ -78,13 +77,11 @@ function SendRequest($url, $payload, $req) {
     return [$httpcode, json_decode($response, true)];
 }
 
-
 function courses_btn () {
     $courses = SendRequest("/course", '', 'GET');
     if ($courses[0] != 200) return false;
 
     $array = [];
-
     foreach ($courses[1] as $x) {
         $array[] = ["text" => $x["name"], "callback_data" => 'CourseID='.$x['id'] ];
     }
@@ -100,7 +97,6 @@ function courses_btn () {
 $data = json_decode(file_get_contents('php://input'), true);
  
 $text = $data["message"]["text"]; 
-
 $chat_id = $data["message"]["from"]["id"];
 $first_name = $data["message"]["from"]["first_name"];
 $message_id = $data["message"]["message_id"]; 

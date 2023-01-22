@@ -1,5 +1,6 @@
 import { Course } from "src/course/entities/course.entity";
 import { Lead } from "src/leads/entities/lead.entity";
+import { LeadsStatus } from "src/leads/role.enum";
 import { ManyToOne, Entity, BaseEntity, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, Column } from "typeorm";
 
 @Entity('orders')
@@ -12,6 +13,12 @@ export class Order extends BaseEntity {
 
     @Column({ nullable: true })
     phone: string;
+
+    @Column('enum', { enum: LeadsStatus, default: 0})
+    order_status: LeadsStatus;
+
+    @Column({ nullable: true })
+    order_comment: string;
 
     @ManyToOne((type) => Lead, (lead) => lead.order, {eager: true})
     lead: Lead;
