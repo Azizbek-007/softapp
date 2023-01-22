@@ -34,8 +34,9 @@ export class SettingController {
 
   @Patch()
   bot_help(@Body() updateDto: UpdateSettingDto) {
-    
+    return this.settingService.add_help_text(updateDto);
   }
+  
   @Post('sendMessage')
   @UseInterceptors(FileInterceptor('photo', {
     storage: diskStorage({
