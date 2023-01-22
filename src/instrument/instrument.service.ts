@@ -6,6 +6,7 @@ import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 import { Instrument } from './entities/instrument.entity';
 import { generate } from 'short-uuid';
 import { Setting } from 'src/setting/entities/setting.entity';
+import { InstrumentTypeEnum } from './intrument.enum';
 
 @Injectable()
 export class InstrumentService {
@@ -15,14 +16,20 @@ export class InstrumentService {
     private SettingRepository: Repository<Setting>
   ) {}
 
-  async create(createInstrumentDto: CreateInstrumentDto) { 
+  async create(createInstrumentDto: CreateInstrumentDto, host: string) {
     let bot_info = await this.SettingRepository.findOneBy({ id: 1 });
     let hash_uuid = generate();
-    createInstrumentDto.link = bot_info.bot_username + "?start=" + hash_uuid;
-    createInstrumentDto.code = hash_uuid;
+    if (createInstrumentDto.type == InstrumentTypeEnum.telegram_bot) {
+      createInstrumentDto.link = bot_info.bot_username + "?start=" + hash_uuid;
+      createInstrumentDto.code = hash_uuid;
+    } else {
+      createInstrumentDto.link = `http://${host}/api/v1/share=` + hash_uuid;
+      createInstrumentDto.code = hash_uuid;
+    }
+
     let new_link = this.InstrumentRepository.create(createInstrumentDto);
-    await new_link.save();
-    return new_link;
+      await new_link.save();
+      return new_link;
   }
 
   async findAll(): Promise<Instrument[]> {
