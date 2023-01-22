@@ -1,5 +1,6 @@
 import { Lead } from "src/leads/entities/lead.entity";
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { InstrumentTypeEnum } from "../intrument.enum";
 
 @Entity('instruments')
 export class Instrument extends BaseEntity {
@@ -20,6 +21,9 @@ export class Instrument extends BaseEntity {
 
     @Column({ default: 0 })
     clicked: number;
+
+    @Column('enum', { enum: InstrumentTypeEnum })
+    type: InstrumentTypeEnum;
 
     @Column({ default: 0 })
     distribution: number;

@@ -1,4 +1,5 @@
-import { IsString, IsNumber, IsOptional } from 'class-validator'
+import { IsString, IsNumber, IsOptional, IsEnum } from 'class-validator'
+import { InstrumentTypeEnum } from '../intrument.enum';
 export class CreateInstrumentDto {
 
     @IsString()
@@ -11,4 +12,6 @@ export class CreateInstrumentDto {
 
     code: string;
 
+    @IsEnum(InstrumentTypeEnum)
+    type: InstrumentTypeEnum; 
 }
