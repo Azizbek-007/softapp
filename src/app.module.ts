@@ -11,6 +11,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { SupportModule } from './support/support.module';
 
 
 @Module({
@@ -25,7 +26,8 @@ import { MulterModule } from '@nestjs/platform-express';
     InstrumentModule,
     OrderModule,
     SettingModule,
-    AuthModule
+    AuthModule,
+    SupportModule
   ]
 })
 export class AppModule {}
