@@ -52,27 +52,19 @@ function sendAPIRequest($url, array $content, $post = true)
     return $result;
 }
 
-$headers = [
-    'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkF6aXpiZWsiLCJpYXQiOjE2NzM5NTQzNjd9.FAAvVvEhVGMjEh1QBLdISOpe_zcQ_MRqpg9mocwE4NI',
-    'Content-Type' => 'application/json'
-    ];
-    
-function CreateLead($payload) {
 
-    GLOBAL $headers;
-
-    
+function SendRequest($url, $payload, $req) {
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-    CURLOPT_URL => 'http://api.sales-up.uz/api/v1/lead',
+    CURLOPT_URL => 'http://api.sales-up.uz/api/v1'.$url,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
     CURLOPT_TIMEOUT => 0,
     CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_CUSTOMREQUEST => $req,
     CURLOPT_POSTFIELDS =>$payload,
     CURLOPT_HTTPHEADER => array(
         'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkF6aXpiZWsiLCJpYXQiOjE2NzM5NTQzNjd9.FAAvVvEhVGMjEh1QBLdISOpe_zcQ_MRqpg9mocwE4NI',
@@ -83,138 +75,17 @@ function CreateLead($payload) {
     $response = curl_exec($curl);
     $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     curl_close($curl);
-    return $httpcode;
-    
+    return [$httpcode, json_decode($response, true)];
 }
 
-function FindPhone($user_id) {
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-      CURLOPT_URL => 'http://api.sales-up.uz/api/v1/lead/5356014595',
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_ENCODING => '',
-      CURLOPT_MAXREDIRS => 10,
-      CURLOPT_TIMEOUT => 0,
-      CURLOPT_FOLLOWLOCATION => true,
-      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-      CURLOPT_CUSTOMREQUEST => 'GET',
-      CURLOPT_HTTPHEADER => array(
-        'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkF6aXpiZWsiLCJpYXQiOjE2NzM5NTQzNjd9.FAAvVvEhVGMjEh1QBLdISOpe_zcQ_MRqpg9mocwE4NI'
-      ),
-    ));
-    
-    $response = curl_exec($curl);
-    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-    $object = json_decode( $response, true );
-    return [$httpcode, $object["phone"]];
-    
-}
-function UpdatePhoneNumber ($payload) {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => 'http://api.sales-up.uz/api/v1/lead/:id?',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'PATCH',
-        CURLOPT_POSTFIELDS =>$payload,
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkF6aXpiZWsiLCJpYXQiOjE2NzM5NTQzNjd9.FAAvVvEhVGMjEh1QBLdISOpe_zcQ_MRqpg9mocwE4NI',
-            'Content-Type: application/json'
-        ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-        echo $response;
-
-}
-
-function courses() {
-    $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => 'http://api.sales-up.uz/api/v1/course',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkF6aXpiZWsiLCJpYXQiOjE2NzM5NTQzNjd9.FAAvVvEhVGMjEh1QBLdISOpe_zcQ_MRqpg9mocwE4NI'
-        ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-        return json_decode($response, true);
-}
-
-
-function course_info ($course_id) {
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-    CURLOPT_URL => 'http://api.sales-up.uz/api/v1/course/'.$course_id,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 0,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'GET',
-    CURLOPT_HTTPHEADER => array(
-        'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkF6aXpiZWsiLCJpYXQiOjE2NzM5NTQzNjd9.FAAvVvEhVGMjEh1QBLdISOpe_zcQ_MRqpg9mocwE4NI'
-    ),
-    ));
-
-    $response = curl_exec($curl);
-
-    curl_close($curl);
-    return json_decode($response, true);
-
-}
-
-function createOrder($payload) {
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-    CURLOPT_URL => 'http://api.sales-up.uz/api/v1/order',
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 0,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'POST',
-    CURLOPT_POSTFIELDS =>$payload,
-    CURLOPT_HTTPHEADER => array(
-        'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkF6aXpiZWsiLCJpYXQiOjE2NzM5NTQzNjd9.FAAvVvEhVGMjEh1QBLdISOpe_zcQ_MRqpg9mocwE4NI',
-        'Content-Type: application/json'
-    ),
-    ));
-
-    $response = curl_exec($curl);
-    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-    return $httpcode;
-}
 
 function courses_btn () {
- 
+    $courses = SendRequest("/course", '', 'GET');
+    if ($courses[0] != 200) return false;
+
     $array = [];
 
-    foreach (courses() as $x) {
+    foreach ($courses[1] as $x) {
         $array[] = ["text" => $x["name"], "callback_data" => 'CourseID='.$x['id'] ];
     }
     
@@ -240,80 +111,121 @@ $callback_from_id = $data["callback_query"]["from"]["id"];
 $callback_message_id = $data["callback_query"]["message"]["message_id"]; 
 $bot_id = explode(':', $token)[0];
 
+ 
 
-$step = []; 
-
-
-
-
-// $regex_simple = "//^[+]?998([- ])?(90|91|93|94|95|98|99|33|97|71)([- ])?(\d{3})([- ])?(\d{2})([- ])?(\d{2})$/)/gm";
-
-if (file_get_contents("$chat_id.$bot_id.txt") == "phone") {
-    $api_payload = json_encode(["user_id" => "$chat_id", "phone" => "$text", "status" => 0]);
-    UpdatePhoneNumber($api_payload);
-    $payload = ['chat_id' => $chat_id, 'text' => "Number Ok"];
-    Answer($payload);
-    unlink("$chat_id.$bot_id.txt");
-}
-
-if ($text == '/test') {
-    $content = [
-                'chat_id' => $chat_id, 
-                'text' => "Hi Guy", 
-                'parse_mode' => 'markdown',
-            ];
-    Answer($content); 
-}
-
-$menu = [["Kurslar", "Help", "Support"]];
+$menu = [["Kurslar"], ["About", "Murajat"]];
 
 if (mb_stripos($text, '/start') !== false) {
+    unlink("$chat_id.$bot_id.txt");
     $text_spilt = explode(' ', $text); 
     if(Count($text_spilt) == 2){
         $payload = json_encode(["user_id" => "$chat_id",  "FIO" => "$first_name $last_name", "instrument" => $text_spilt[1] ]);
-        $adad = CreateLead($payload);
+        $data = SendRequest('/lead', $payload, 'POST');
+        SendRequest('instrument/:id', $payload, 'PATCH');
     }else{
         $payload = json_encode(["user_id" => "$chat_id",  "FIO" => "$first_name $last_name" ]); 
-        $adad = CreateLead($payload);
+        $data = SendRequest('/lead', $payload, 'POST');
     }
 
-    $check_phone = FindPhone($chat_id); 
+    $check_phone = SendRequest('/lead/'.$chat_id, '', 'GET'); 
     if($check_phone[0] == 200) {
-        if ($check_phone[1] == "0"){
+        if ($check_phone[1]["phone"] == "0"){
             $content = ['chat_id' => $chat_id, 'text' => "Assalawma aeykum telefon nomerin'izdi kiritin':", 'parse_mode' => 'markdown']; 
             Answer($content);
             file_put_contents("$chat_id.$bot_id.txt", "phone");
+            exit();
         }else{
             $content = [
                 'chat_id' => $chat_id, 
-                'text' => "Courses", 
+                'text' => "Assaalawma aleykum",  
                 'parse_mode' => 'markdown',
-                'reply_markup' => courses_btn()
+                'reply_markup' => buildKeyBoard($menu)
             ];
             Answer($content);  
         }
     }
 }  
 
-if ($callback_data == 'menu'){
-    $content = ['chat_id' => $callback_from_id, 'message_id'=>$callback_message_id];
-    endpoint('deleteMessage', $content);
-    $content = ['chat_id' => $callback_from_id, 'text' => "courses", 'parse_mode' => 'markdown', 
-    'reply_markup' => courses_btn()];
+if (file_get_contents("$chat_id.$bot_id.txt") == "phone") {
+    if(preg_match('/^[\+]?(998)?([- (])?(90|91|93|94|95|98|99|33|97|71|75)([- )])?(\d{3})([- ])?(\d{2})([- ])?(\d{2})$/', "$text") != false) {
+        $api_payload = json_encode(["user_id" => "$chat_id", "phone" => "$text", "status" => 0]);
+        SendRequest('/lead/:id?', $api_payload, 'PATCH');
+        $payload = ['chat_id' => $chat_id, 'text' => "Number Ok"];
+        Answer($payload);
+        unlink("$chat_id.$bot_id.txt");
+    }else{
+        $payload = ['chat_id' => $chat_id, 'text' => "No Number"];
+        Answer($payload);
+    }
+} 
+
+if ($text == $menu[0][0]){
+    $course_btn = courses_btn();
+    if ($course_btn == false) { 
+        $content = [
+            'chat_id' => $chat_id, 
+            'text' => "Ha'zirde bizde kurslar joq", 
+            'parse_mode' => 'markdown'
+        ];
+        Answer($content);
+        exit();
+    }
+    $content = [
+        'chat_id' => $chat_id, 
+        'text' => "Ha'zirde bizde bar bolg'an kurslar", 
+        'parse_mode' => 'markdown',
+        'reply_markup' => $course_btn
+    ];
     Answer($content);  
 }
 
+if ($text == 'About'){
+    $data = SendRequest('/setting', '', 'GET')[1];
+    $content = [ 
+        'chat_id' => $chat_id, 
+        'text' => $data["contact"]."\n\n©️ <b>SoftApp</b>", 
+        'parse_mode' => 'html',
+    ];
+    Answer($content);  
+}
+
+if (file_get_contents("$chat_id.$bot_id.txt") == "murajat") {
+    if ($text == "Arqag'a") {
+        unlink("$chat_id.$bot_id.txt");
+        $payload = ['chat_id' => $chat_id, 'text' => "menu", 'reply_markup' => buildKeyBoard($menu)];
+        Answer($payload);
+        exit();
+    }
+    unlink("$chat_id.$bot_id.txt");
+    $api_payload = json_encode(["question" => "$text", "user_id" => "$chat_id", "message_id" => "$message_id"]);
+    $data = SendRequest('/support', $api_payload, 'POST');
+    $payload = ['chat_id' => $chat_id, 'text' => "Tez arada juwap beremeiz", 'reply_to_message_id' => $message_id, 'reply_markup' => buildKeyBoard($menu)];
+    Answer($payload);
+} 
+
+if($text == "Murajat") {
+    unlink("$chat_id.$bot_id.txt");
+    file_put_contents("$chat_id.$bot_id.txt", "murajat");
+    $content = [ 
+        'chat_id' => $chat_id, 
+        'text' => "Murajatin'izdi jazip qaldirin':", 
+        'parse_mode' => 'html',
+        'reply_markup' => buildKeyBoard([["Arqag'a"]])
+    ];
+    Answer($content);
+}
+
+
 if(mb_stripos($callback_data, "CourseID=") !== false) {
     $course_id = explode('=', $callback_data)[1];
-    $course_information = course_info($course_id);
+    $course_information = SendRequest('/course/'.$course_id, '', 'GET')[1];
     $content = [
         'chat_id' => $callback_from_id, 
         'text' => "🔖<b>".$course_information["name"]."</b>\n".$course_information["description"],
         'parse_mode' => "html",
         'reply_markup' => json_encode([
             "inline_keyboard" => [
-                [["text" => "Kursqa jaziliw", "callback_data" => "OKCourse=$course_id"]],
-                [["text" => "Menu", "callback_data" => "menu"]]
+                [["text" => "Kursqa jaziliw", "callback_data" => "OKCourse=$course_id"]]
             ]
         ]),
     ];
@@ -325,9 +237,7 @@ if(mb_stripos($callback_data, "CourseID=") !== false) {
 if(mb_stripos($callback_data, "OKCourse=") !== false) {
     $course_id = explode('=', $callback_data)[1];
     $payload = json_encode(["user_id" => "$callback_from_id", "course" => intval($course_id)]);
-    $data = createOrder($payload);
-    $content = ['chat_id' => $callback_from_id, 'text' => $data];
-    Answer($content);  
+    $data = SendRequest('/order', $payload, 'POST')[0];
     
     $content = [
         'chat_id' => $callback_from_id, 
@@ -338,5 +248,3 @@ if(mb_stripos($callback_data, "OKCourse=") !== false) {
     $content = ['chat_id' => $callback_from_id, 'message_id'=>$callback_message_id];
     endpoint('deleteMessage', $content); 
 }
-
-           
