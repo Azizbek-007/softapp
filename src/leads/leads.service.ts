@@ -55,6 +55,9 @@ export class LeadsService {
           phone: Like('%' + phone + '%'), 
           createdAt: Between(from_date, to_Date),
         },
+        order: {
+          id: 'DESC'
+        },
         
         take: take,
         skip: skip

@@ -57,8 +57,8 @@ export class OrderService {
     try {
       const [data, total] = await this.OrderRepository.findAndCount(
         {
-          where: { FIO: Like('%' + name + '%'), phone: Like('%' + phone + '%'), createdAt: Between(from_date, to_Date) }, 
-
+          where: { FIO: Like('%' + name + '%'), phone: Like('%' + phone + '%'), createdAt: Between(from_date, to_Date) },
+          order: { 'id': 'DESC' },
           take: take,
           skip: skip
         }

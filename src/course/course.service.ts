@@ -32,7 +32,9 @@ export class CourseService {
   }
 
   async findAll(): Promise<Course[]> {
-    let courses = await this.CoureRepository.find();
+    let courses = await this.CoureRepository.find({ 
+      order: { 'id': 'DESC'}
+    });
     if (courses.length == 0) {
       throw new NotFoundException();
     }

@@ -19,13 +19,19 @@ export class SupportService {
   }
 
   async findAll() {
-    let find_all = await this.SupportRepository.findBy({ answer: IsNull() });
+    let find_all = await this.SupportRepository.find({ 
+      where: { answer: IsNull() },
+      order: { 'id': 'DESC'}
+    });
     if (find_all.length == 0) throw new NotFoundException();
     return find_all;
   }
 
   async answeredAll() {
-    let find_all = await this.SupportRepository.findBy({ answer:  Not(IsNull()) });
+    let find_all = await this.SupportRepository.find({
+      where: { answer:  Not(IsNull())},
+      order: { 'id': 'DESC' }
+     });
     if (find_all.length == 0) throw new NotFoundException();
     return find_all;
   }

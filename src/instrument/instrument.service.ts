@@ -26,7 +26,9 @@ export class InstrumentService {
   }
 
   async findAll(): Promise<Instrument[]> {
-    let all_links = await this.InstrumentRepository.find();
+    let all_links = await this.InstrumentRepository.find({
+      order: { 'id' : 'DESC'}
+    });
     if (all_links.length == 0) {
       throw new NotFoundException();
     }
