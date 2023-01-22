@@ -8,8 +8,8 @@ export class ShareService {
   constructor (
     @InjectRepository(Instrument) private InstrumentRepository: Repository<Instrument>,
   ){}
-  async add_check() {
-    let one_link = await this.InstrumentRepository.findOneBy({ code: '' });
+  async add_check(share_code: string) {
+    let one_link = await this.InstrumentRepository.findOneBy({ code: share_code });
 
     if (one_link == null) {
       throw new NotFoundException();
