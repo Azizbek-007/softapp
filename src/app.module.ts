@@ -12,6 +12,7 @@ import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { SupportModule } from './support/support.module';
+import { ShareModule } from './share/share.module';
 
 
 @Module({
@@ -27,7 +28,8 @@ import { SupportModule } from './support/support.module';
     OrderModule,
     SettingModule,
     AuthModule,
-    SupportModule
+    SupportModule,
+    ShareModule
   ]
 })
 export class AppModule {}

@@ -23,7 +23,7 @@ export class InstrumentService {
       createInstrumentDto.link = bot_info.bot_username + "?start=" + hash_uuid;
       createInstrumentDto.code = hash_uuid;
     } else {
-      createInstrumentDto.link = `http://${host}/api/v1/share=` + hash_uuid;
+      createInstrumentDto.link = `http://${host}/api/v1/?share=` + hash_uuid;
       createInstrumentDto.code = hash_uuid;
     }
 
@@ -48,7 +48,7 @@ export class InstrumentService {
   }
 
   async update(id: number, updateInstrumentDto: UpdateInstrumentDto) {
-    console.log(id)
+
     let one_link = await this.InstrumentRepository.findOneBy({ id });
 
     if (one_link == null) {
