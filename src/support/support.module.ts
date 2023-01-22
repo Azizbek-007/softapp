@@ -3,9 +3,10 @@ import { SupportService } from './support.service';
 import { SupportController } from './support.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Support } from './entities/support.entity';
+import { Setting } from 'src/setting/entities/setting.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ Support ])],
+  imports: [TypeOrmModule.forFeature([ Support, Setting ])],
   controllers: [SupportController],
   providers: [SupportService]
 })

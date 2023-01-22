@@ -17,9 +17,9 @@ export class SupportController {
     return this.supportService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.supportService.findOne(+id);
+  @Get('answered')
+  findAnsweredAll() {
+    return this.supportService.answeredAll();
   }
 
   @Patch(':id')
