@@ -25,11 +25,11 @@ export class Lead extends BaseEntity {
     @Column({ nullable: true }) 
     comment: string;
 
-    @ManyToOne(() => Course)
-    course: Course;
+    // @ManyToOne(() => Course)
+    // course: Course;
 
-    @Column({ nullable: true })
-    courseId: number;
+    // @Column({ nullable: true })
+    // courseId: number;
 
     @ManyToOne(() => Instrument, (instrument) => instrument.leads, { eager: true, nullable:true })
     instrument: Instrument;

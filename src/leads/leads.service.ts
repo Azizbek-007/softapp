@@ -49,14 +49,10 @@ export class LeadsService {
     const to_Date = query.to || '3000-01-01';
     const [data, total] = await this.LeadRepository.findAndCount(
       {
-        relations: {
-          course: true
-        },
         where:  { 
           FIO: Like('%' + keyword + '%'), 
           user_id: Like('%' + user_id + '%'),
           phone: Like('%' + phone + '%'), 
-          course: course, 
           createdAt: Between(from_date, to_Date),
         },
         order: {
