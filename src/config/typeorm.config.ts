@@ -11,6 +11,12 @@ export const TypeOrmConfig: TypeOrmModuleOptions = {
     database: process.env.DB_NAME,
     autoLoadEntities: true,
     synchronize: true,
-    cache: {type: "redis", duration: 60000}
-    // logging: true
+    cache: {
+        type: "redis", 
+        options: {
+            host: "localhost",
+            port: 6379
+        },
+        duration: 60000
+    }
 };
