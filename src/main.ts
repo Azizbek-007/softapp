@@ -11,7 +11,7 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix('api/v1');
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false, whitelist: true, transform: true}));
   // app.useStaticAssets(join(__dirname, '..', 'public'), {prefix: '/public'});
 
   const config = new DocumentBuilder()
