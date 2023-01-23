@@ -36,6 +36,17 @@ export class SupportService {
     return find_all;
   }
 
+  async SupportChat(user_id: string) {
+    try {
+      let findall_questions = await this.SupportRepository.findBy({ user_id });
+      if (findall_questions == null) throw new NotFoundException();
+      return findall_questions;
+
+    } catch (error) {
+      return error;
+      
+    }
+  }
 
   async update(id: number, updateSupportDto: UpdateSupportDto) {
     let find_ques = await this.SupportRepository.findOneBy({ id });

@@ -22,6 +22,10 @@ export class SupportController {
     return this.supportService.answeredAll();
   }
 
+  @Get('/chat/:user_id')
+  OpenChat(@Param('user_id') user_id: string) {
+    return this.supportService.SupportChat(user_id);
+  }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSupportDto: UpdateSupportDto) {
     return this.supportService.update(+id, updateSupportDto);

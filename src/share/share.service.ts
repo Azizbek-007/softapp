@@ -18,5 +18,6 @@ export class ShareService {
       clicked: one_link.clicked + 1,
       distribution: one_link.price/(one_link.clicked +1)
     });
+    
   }
 }
