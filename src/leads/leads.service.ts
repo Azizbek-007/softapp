@@ -92,8 +92,11 @@ export class LeadsService {
       throw new NotFoundException();
     }
     delete updateLeadDto.user_id;
-    console.log(updateLeadDto)
-    await this.LeadRepository.update(find.id, updateLeadDto);
+    try {
+      await this.LeadRepository.update(find.id, updateLeadDto); 
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
     return find.id;
   }
 
