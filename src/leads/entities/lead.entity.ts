@@ -25,8 +25,7 @@ export class Lead extends BaseEntity {
     @Column({ nullable: true }) 
     comment: string;
 
-    @OneToOne(() => Course, { nullable: true })
-    @JoinColumn()
+    @ManyToOne(() => Course)
     course: Course;
 
     @Column({ nullable: true })

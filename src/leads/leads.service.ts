@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { from } from 'rxjs';
 import { Course } from 'src/course/entities/course.entity';
 import { Instrument } from 'src/instrument/entities/instrument.entity';
-import { Between, IsNull, LessThanOrEqual, Like, MoreThanOrEqual, Not, Raw, Repository } from 'typeorm';
+import { Any, Between, IsNull, LessThanOrEqual, Like, MoreThanOrEqual, Not, Raw, Repository } from 'typeorm';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { Lead } from './entities/lead.entity';
@@ -42,7 +42,7 @@ export class LeadsService {
     const page=query.page || 1;
     const skip= (page-1) * take ;
     const keyword = query.name || '';
-    const courseId = query.courseId;
+    const course = query.course;
     const phone = query.phone || '';
     const user_id = query.userid || '';
     const from_date = query.from || '2000-01-01';
@@ -56,7 +56,7 @@ export class LeadsService {
           FIO: Like('%' + keyword + '%'), 
           user_id: Like('%' + user_id + '%'),
           phone: Like('%' + phone + '%'), 
-          courseId, 
+          course: course, 
           createdAt: Between(from_date, to_Date),
         },
         order: {
@@ -95,6 +95,7 @@ export class LeadsService {
       throw new NotFoundException();
     }
     delete updateLeadDto.user_id;
+    console.log(updateLeadDto)
     await this.LeadRepository.update(find.id, updateLeadDto);
     return find.id;
   }

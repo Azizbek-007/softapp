@@ -4,20 +4,33 @@ import { Course } from 'src/course/entities/course.entity';
 import { LeadsStatus } from '../role.enum';
 import { CreateLeadDto } from './create-lead.dto';
 
-export class UpdateLeadDto extends PartialType(CreateLeadDto) {
-    @IsOptional()
+export class UpdateLeadDto {
     @IsString()
+    user_id: string;
+
+    @IsString()
+    @IsOptional()
+    FIO?: string;
+
+    @IsString()
+    @IsOptional()
     comment?: string;
 
-    @IsOptional()
     @IsString()
+    @IsOptional()
     phone?: string;
 
-    @IsOptional()
     @IsEnum(LeadsStatus)
+    @IsOptional()
     status?: LeadsStatus 
 
-    @IsOptional()
     @IsNumber()
-    course: Course;
+    @IsOptional()
+    course?: Course;
+
+    @IsNumber()
+    @IsOptional()
+    courseId?: number;
+
+
 }
