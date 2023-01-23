@@ -16,18 +16,19 @@ export class Order extends BaseEntity {
 
     @Column('enum', { enum: LeadsStatus, default: 0})
     order_status: LeadsStatus;
+    
+    @Column({ unique: true })
+    lead_course_id: string;
 
     @Column({ nullable: true })
     order_comment: string;
 
-    @ManyToOne((type) => Lead, (lead) => lead.order, {eager: true})
+    @ManyToOne((type) => Lead, (lead) => lead.order)
     lead: Lead;
 
-    @ManyToOne((type) => Course, (course) => course.order, { eager: true, cascade: true })
+    @ManyToOne((type) => Course, (course) => course.order)
     course: Course;
 
-    @Column({ unique: true })
-    lead_course_id: string;
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;

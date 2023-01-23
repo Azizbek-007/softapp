@@ -55,15 +55,23 @@ export class OrderService {
     if (take >= 0 && page == 0) throw new BadRequestException("page should not be equal to 0");
      
     try {
+
       const [data, total] = await this.OrderRepository.findAndCount(
         {
-          cache: true,
-          where: { 
-            FIO: Like('%' + name + '%'),
-             phone: Like('%' + phone + '%'), 
-             createdAt: Between(from_date, to_Date) 
+          relations: {
+            lead: true,
+            course: true
           },
-          order: { 'id': 'DESC' },
+          cache: true,
+          where:  { 
+            FIO: Like('%' + name + '%'), 
+            phone: Like('%' + phone + '%'), 
+            createdAt: Between(from_date, to_Date),
+          },
+          order: {
+            id: 'DESC'
+          },
+          
           take: take,
           skip: skip
         }
@@ -71,7 +79,7 @@ export class OrderService {
      
       return {data, total};   
     } catch (error) {
-      throw new InternalServerErrorException(error.message)
+      throw new InternalServerErrorException(error)
     }
   }
 

@@ -47,6 +47,7 @@ export class LeadsService {
     const user_id = query.userid || '';
     const from_date = query.from || '2000-01-01';
     const to_Date = query.to || '3000-01-01';
+    
     const [data, total] = await this.LeadRepository.findAndCount(
       {
         cache: true,
