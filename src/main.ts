@@ -2,19 +2,16 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+  const app = await NestFactory.create(AppModule, {
     logger: ['debug', 'error', 'verbose', 'warn'],
     bodyParser: true,
     cors: true
   });
 
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), { prefix: '/upload' });
   app.setGlobalPrefix('api/v1');
-  app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false, whitelist: true, transform: true}));
+  app.useGlobalPipes(new ValidationPipe());
   // app.useStaticAssets(join(__dirname, '..', 'public'), {prefix: '/public'});
 
   const config = new DocumentBuilder()
