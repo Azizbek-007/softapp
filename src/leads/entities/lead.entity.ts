@@ -1,7 +1,7 @@
 import { Course } from "src/course/entities/course.entity";
 import { Instrument } from "src/instrument/entities/instrument.entity";
 import { Order } from "src/order/entities/order.entity";
-import { BaseEntity, BeforeInsert, Column, CreateDateColumn, DatabaseType, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, Column, CreateDateColumn, DatabaseType, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { LeadsStatus } from "../role.enum";
 
 @Entity('leads_cm')
@@ -24,6 +24,13 @@ export class Lead extends BaseEntity {
 
     @Column({ nullable: true }) 
     comment: string;
+
+    @OneToOne(() => Course, { nullable: true })
+    @JoinColumn()
+    course: Course;
+
+    @Column({ nullable: true })
+    courseId: number;
 
     @ManyToOne(() => Instrument, (instrument) => instrument.leads, { eager: true, nullable:true })
     instrument: Instrument;

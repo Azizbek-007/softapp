@@ -1,5 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsEnum, IsNotEmpty, IsOptional, IsPassportNumber, IsString, NotEquals } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPassportNumber, IsString, NotEquals } from 'class-validator';
+import { Course } from 'src/course/entities/course.entity';
 import { LeadsStatus } from '../role.enum';
 import { CreateLeadDto } from './create-lead.dto';
 
@@ -15,4 +16,8 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
     @IsOptional()
     @IsEnum(LeadsStatus)
     status?: LeadsStatus 
+
+    @IsOptional()
+    @IsNumber()
+    course: Course;
 }
