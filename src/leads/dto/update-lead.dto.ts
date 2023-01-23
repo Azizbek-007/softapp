@@ -24,9 +24,6 @@ export class UpdateLeadDto {
     @IsOptional()
     status?: LeadsStatus 
 
-    @IsNumber()
-    @IsOptional()
-    course?: Course;
 
     @IsNumber()
     @IsOptional()

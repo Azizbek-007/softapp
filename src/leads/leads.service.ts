@@ -53,6 +53,7 @@ export class LeadsService {
           FIO: Like('%' + keyword + '%'), 
           user_id: Like('%' + user_id + '%'),
           phone: Like('%' + phone + '%'), 
+          course: course, 
           createdAt: Between(from_date, to_Date),
         },
         order: {
