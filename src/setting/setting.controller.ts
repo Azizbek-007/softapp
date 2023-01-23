@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFiles, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFiles, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, ParseFilePipeBuilder, HttpStatus, HttpException, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { SettingService } from './setting.service';
 import { CreateSettingDto } from './dto/create-setting.dto';
@@ -40,17 +40,21 @@ export class SettingController {
   @Post('sendMessage')
   @UseInterceptors(FileInterceptor('photo', {
     storage: diskStorage({
-      destination: './uploads'
-    }),
-    fileFilter: (req, file, cb) => {
-      file.filename = Date.now() + '-' +file.originalname ;
-      cb(null, true);
-    },
+      destination: './uploads',
+      filename(req, file, callback) {
+        let mime = file.mimetype;
+        if (mime == 'image/jpeg' || mime == 'image/png'){
+          file.filename = Date.now() + '-' + file.originalname;
+          callback(null, file.filename);
+        }else {
+          callback(new HttpException('Only images are allowed', HttpStatus.NOT_ACCEPTABLE), file.originalname);
+        }
+      },
+    })
   }))
 
-  sendMesage(@UploadedFile() file: Express.Multer.File, @Body() sendMessageDto: SendMessageDto) {
-    console.log(file)
-    console.log(sendMessageDto)
-    return this.settingService.send_message(sendMessageDto);
+  sendMesage(@UploadedFile() file: Express.Multer.File, @Body() sendMessageDto: SendMessageDto, @Req() req) {
+    let file_path = `${req.protocol}://${req.hostname}/upload/${file.filename}`;
+    return this.settingService.send_message(file_path, sendMessageDto);
   }
 }

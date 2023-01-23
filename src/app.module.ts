@@ -21,6 +21,11 @@ import { ShareModule } from './share/share.module';
     TypeOrmModule.forRoot(TypeOrmConfig),
     MulterModule.register({
       dest: '../uploads',
+
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../uploads'), // added ../ to get one folder back
+      serveRoot: '/upload/' //last slash was important
     }),
     CourseModule,
     LeadsModule,
