@@ -57,6 +57,7 @@ export class OrderService {
     try {
       const [data, total] = await this.OrderRepository.findAndCount(
         {
+          cache: true,
           where: { 
             FIO: Like('%' + name + '%'),
              phone: Like('%' + phone + '%'), 

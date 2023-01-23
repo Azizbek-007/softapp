@@ -20,6 +20,7 @@ export class SupportService {
 
   async findAll() {
     let find_all = await this.SupportRepository.find({ 
+      cache: true,
       where: { answer: IsNull() },
       order: { 'id': 'DESC'}
     });
@@ -29,6 +30,7 @@ export class SupportService {
 
   async answeredAll() {
     let find_all = await this.SupportRepository.find({
+      cache: true,
       where: { answer:  Not(IsNull())},
       order: { 'id': 'DESC' }
      });

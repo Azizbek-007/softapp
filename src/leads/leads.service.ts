@@ -49,6 +49,7 @@ export class LeadsService {
     const to_Date = query.to || '3000-01-01';
     const [data, total] = await this.LeadRepository.findAndCount(
       {
+        cache: true,
         where:  { 
           FIO: Like('%' + keyword + '%'), 
           user_id: Like('%' + user_id + '%'),
