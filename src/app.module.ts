@@ -24,8 +24,8 @@ import { ShareModule } from './share/share.module';
 
     }),
     ServeStaticModule.forRoot({
+      serveRoot: '/upload/',
       rootPath: join(__dirname, '..', 'uploads'), // added ../ to get one folder back
-      serveRoot: '/upload/' //last slash was important
     }),
     CourseModule,
     LeadsModule,
