@@ -31,14 +31,25 @@ export class CourseService {
     return find;
   }
 
-  async findAll(): Promise<Course[]> {
-    let courses = await this.CoureRepository.find({ 
-      order: { 'id': 'DESC'}
-    });
-    if (courses.length == 0) {
+  async findAll(query){
+    const {take, skip} = query
+    const [data, total] = await this.CoureRepository.findAndCount(
+      {
+        cache: true,
+        order: {
+          id: 'DESC'
+        },
+        
+        take: take,
+        skip: skip
+      }
+    );
+
+    if (data.length == 0) {
       throw new NotFoundException();
     }
-    return courses;
+
+    return {data, total};
   }
 
   async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
