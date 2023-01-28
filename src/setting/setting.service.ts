@@ -32,7 +32,7 @@ export class SettingService {
     fs.readFile(php_file_adress, 'utf8', (err, data) => {
       if (err) throw new InternalServerErrorException(err);
       let token = createSettingDto.bot_token;
-      fs.writeFile(process.cwd() + '/wtf.php', `<?php \n$token = "${token}";\n${data}`, 'utf8', (err) => console.log(err));
+      fs.writeFile(process.cwd() + '/../wtf.php', `<?php \n$token = "${token}";\n${data}`, 'utf8', (err) => console.log(err));
     });
 
     // if (find_bot.bot_token != null) throw new ConflictException("bot exist")
