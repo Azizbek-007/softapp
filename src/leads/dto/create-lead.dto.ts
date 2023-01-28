@@ -4,6 +4,7 @@ import { LeadsStatus } from '../role.enum';
 
 export class CreateLeadDto {
 
+    @IsOptional()
     @IsString()
     user_id: string;
 
@@ -18,4 +19,8 @@ export class CreateLeadDto {
 
     @IsOptional()
     comment: string;
+
+    @IsNumber()
+    @IsOptional()
+    courseId?: number;
 }

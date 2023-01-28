@@ -49,7 +49,6 @@ export class LeadsService {
     const keyword = query.name || '';
     const course = query.course;
     const phone = query.phone || '';
-    const user_id = query.userid || '';
     const from_date = query.from || '2000-01-01';
     const to_Date = query.to || '3000-01-01';
     
@@ -58,9 +57,8 @@ export class LeadsService {
         cache: true,
         where:  { 
           FIO: Like('%' + keyword + '%'), 
-          user_id: Like('%' + user_id + '%'),
           phone: Like('%' + phone + '%'), 
-          course: course, 
+          course, 
           createdAt: Between(from_date, to_Date),
         },
         order: {
@@ -113,6 +111,11 @@ export class LeadsService {
       throw new NotFoundException();
     }
     await this.LeadRepository.remove(find);
+  }
+
+  async ok() {
+    console.log('okokok');
+    return 'ok';
   }
 }
 

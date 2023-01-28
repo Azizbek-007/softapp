@@ -35,7 +35,6 @@ export class CourseService {
     const {take, skip} = query
     const [data, total] = await this.CoureRepository.findAndCount(
       {
-        cache: true,
         order: {
           id: 'DESC'
         },

@@ -3,11 +3,21 @@ import { AuthGuard } from '@nestjs/passport';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { OrderLeadPublic } from './order_lead.service';
+import { CreateLeadDto } from 'src/leads/dto/create-lead.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('order')
 export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(
+    private readonly orderService: OrderService,
+    private readonly orderLeadPublic: OrderLeadPublic
+    ) {}
+
+  @Post('/ok')
+  okk(@Body() dto: CreateLeadDto) {
+    return this.orderLeadPublic.cr(dto);
+  }
 
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
@@ -33,4 +43,5 @@ export class OrderController {
   remove(@Param('id') id: string) {
     return this.orderService.remove(+id);
   }
+
 }
