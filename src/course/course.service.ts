@@ -77,4 +77,10 @@ export class CourseService {
       throw new InternalServerErrorException(error);
     }
   }
+
+  async findAll_public() {
+    let find = await this.CoureRepository.find({ select: ['id', 'name'] });
+    if (!find) throw new NotFoundException();
+    return find;
+  }
 }
