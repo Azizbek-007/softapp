@@ -55,6 +55,7 @@ function sendAPIRequest($url, array $content, $post = true)
 
 function SendRequest($url, $payload, $req) {
     $curl = curl_init();
+
     curl_setopt_array($curl, array(
     CURLOPT_URL => 'http://api.sales-up.uz/api/v1'.$url,
     CURLOPT_RETURNTRANSFER => true,
@@ -77,11 +78,13 @@ function SendRequest($url, $payload, $req) {
     return [$httpcode, json_decode($response, true)];
 }
 
+
 function courses_btn () {
     $courses = SendRequest("/course", '', 'GET');
     if ($courses[0] != 200) return false;
 
     $array = [];
+
     foreach ($courses[1] as $x) {
         $array[] = ["text" => $x["name"], "callback_data" => 'CourseID='.$x['id'] ];
     }
@@ -97,6 +100,7 @@ function courses_btn () {
 $data = json_decode(file_get_contents('php://input'), true);
  
 $text = $data["message"]["text"]; 
+
 $chat_id = $data["message"]["from"]["id"];
 $first_name = $data["message"]["from"]["first_name"];
 $message_id = $data["message"]["message_id"]; 
@@ -111,7 +115,7 @@ $bot_id = explode(':', $token)[0];
 
 $menu = [["Kurslar"], ["About", "Murajat"]];
 
-if (mb_stripos($text, '/start') !== false) {
+if (stripos($text, '/start') !== false) {
     unlink("$chat_id.$bot_id.txt");
     $text_spilt = explode(' ', $text); 
     if(Count($text_spilt) == 2){
@@ -122,13 +126,13 @@ if (mb_stripos($text, '/start') !== false) {
         $payload = json_encode(["user_id" => "$chat_id",  "FIO" => "$first_name $last_name" ]); 
         $data = SendRequest('/lead', $payload, 'POST');
     }
-
+ 
     $check_phone = SendRequest('/lead/'.$chat_id, '', 'GET'); 
     if($check_phone[0] == 200) {
         if ($check_phone[1]["phone"] == "0"){
             $content = ['chat_id' => $chat_id, 'text' => "Assalawma aeykum telefon nomerin'izdi kiritin':", 'parse_mode' => 'markdown']; 
             Answer($content);
-            file_put_contents("$chat_id.$bot_id.txt", "phone");
+            @file_put_contents("$chat_id.$bot_id.txt", "phone");
             exit();
         }else{
             $content = [
@@ -142,7 +146,7 @@ if (mb_stripos($text, '/start') !== false) {
     }
 }  
 
-if (file_get_contents("$chat_id.$bot_id.txt") == "phone") {
+if (@file_get_contents("$chat_id.$bot_id.txt") == "phone") {
     if(preg_match('/^[\+]?(998)?([- (])?(90|91|93|94|95|98|99|33|97|71|75)([- )])?(\d{3})([- ])?(\d{2})([- ])?(\d{2})$/', "$text") != false) {
         $api_payload = json_encode(["user_id" => "$chat_id", "phone" => "$text", "status" => 0]);
         SendRequest('/lead/:id?', $api_payload, 'PATCH');
@@ -157,6 +161,7 @@ if (file_get_contents("$chat_id.$bot_id.txt") == "phone") {
 
 if ($text == $menu[0][0]){
     $course_btn = courses_btn();
+
     if ($course_btn == false) { 
         $content = [
             'chat_id' => $chat_id, 
@@ -185,7 +190,7 @@ if ($text == 'About'){
     Answer($content);  
 }
 
-if (file_get_contents("$chat_id.$bot_id.txt") == "murajat") {
+if (@file_get_contents("$chat_id.$bot_id.txt") == "murajat") {
     if ($text == "Arqag'a") {
         unlink("$chat_id.$bot_id.txt");
         $payload = ['chat_id' => $chat_id, 'text' => "menu", 'reply_markup' => buildKeyBoard($menu)];
@@ -195,7 +200,7 @@ if (file_get_contents("$chat_id.$bot_id.txt") == "murajat") {
     unlink("$chat_id.$bot_id.txt");
     $api_payload = json_encode(["question" => "$text", "user_id" => "$chat_id", "message_id" => "$message_id"]);
     $data = SendRequest('/support', $api_payload, 'POST');
-    $payload = ['chat_id' => $chat_id, 'text' => "Tez arada juwap beremeiz", 'reply_to_message_id' => $message_id, 'reply_markup' => buildKeyBoard($menu)];
+    $payload = ['chat_id' => $chat_id, 'text' => "Tez arada juwap beremeiz $data[0]", 'reply_to_message_id' => $message_id, 'reply_markup' => buildKeyBoard($menu)];
     Answer($payload);
 } 
 
@@ -211,9 +216,9 @@ if($text == "Murajat") {
     Answer($content);
 }
 
-
-if(mb_stripos($callback_data, "CourseID=") !== false) {
+if(stripos($callback_data, "CourseID=") !== false) {
     $course_id = explode('=', $callback_data)[1];
+    SendRequest('/course/'.$course_id, '', 'PATCH');
     $course_information = SendRequest('/course/'.$course_id, '', 'GET')[1];
     $content = [
         'chat_id' => $callback_from_id, 
@@ -230,7 +235,7 @@ if(mb_stripos($callback_data, "CourseID=") !== false) {
     endpoint('deleteMessage', $content);
 }
 
-if(mb_stripos($callback_data, "OKCourse=") !== false) {
+if(stripos($callback_data, "OKCourse=") !== false) {
     $course_id = explode('=', $callback_data)[1];
     $payload = json_encode(["user_id" => "$callback_from_id", "course" => intval($course_id)]);
     $data = SendRequest('/order', $payload, 'POST')[0];
