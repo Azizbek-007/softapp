@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Setting } from './entities/setting.entity';
 import { User } from 'src/auth/entities/auth.entity';
 import { FileUploadService } from './file.s3.service';
+import { Lead } from 'src/leads/entities/lead.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Setting, User])],
+  imports: [TypeOrmModule.forFeature([Setting, User, Lead])],
   controllers: [SettingController],
   providers: [SettingService, FileUploadService],
 })

@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { CreateSettingDto } from './dto/create-setting.dto';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 import { Setting } from './entities/setting.entity';
@@ -15,6 +15,7 @@ const fse = require('fs-extra')
 import axios from 'axios';
 import path from 'path';
 import { SendMessageDto } from './dto/send-message.dto';
+import { Lead } from 'src/leads/entities/lead.entity';
 var fs = require('fs')
 var Client = require('ftp');
 
@@ -23,6 +24,8 @@ export class SettingService {
   constructor(
     @InjectRepository(Setting)
     private SettingRepository: Repository<Setting>,
+    @InjectRepository(Lead)
+    private LeadRepository: Repository<Lead>
   ) { }
 
   async create(createSettingDto: CreateSettingDto): Promise<void> {
@@ -103,12 +106,32 @@ export class SettingService {
   }
 
   async send_message(filename: string, sendMessageDto: SendMessageDto) {
+    let c = 0
+    const tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
+    if(!sendMessageDto.user_id){
+      let users = await this.LeadRepository.findBy({ user_id: Not(IsNull())});
+      users.forEach(async (user) => {
+        console.log(user.user_id)
+        try {
+          if (filename == null) {
+            await axios.get(
+              `https://api.telegram.org/bot${tg_bot.bot_token}/sendmessage?chat_id=${user.user_id}&text=${sendMessageDto.message}&parse_mode=html`,
+            );
+          } else {
+            await axios.get(
+              `https://api.telegram.org/bot${tg_bot.bot_token}/sendphoto?chat_id=${user.user_id}&photo=${filename}&caption=${sendMessageDto.message}&parse_mode=html`,
+            );
+          }
+          c += 1;
+        } catch (error) {
+          console.log(error);
+        }
+      })
+      return { send: c };
+    }
     sendMessageDto.user_id.replace(' ', '');
     const user_id_array = sendMessageDto.user_id.split(',');
-    const tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
     try {
-      let c = 0
-
       for await (const num of user_id_array) {
         try {
           if (filename == null) {

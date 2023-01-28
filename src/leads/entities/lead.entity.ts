@@ -9,7 +9,7 @@ export class Lead extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ unique: true })
+    @Column({ unique: true, nullable: true })
     user_id: string;
 
     @Column()
