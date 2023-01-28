@@ -7,10 +7,8 @@ import { User } from 'src/auth/entities/auth.entity';
 import { FileUploadService } from './file.s3.service';
 
 @Module({
-  imports:[
-            TypeOrmModule.forFeature([ Setting, User ]),
-          ],
+  imports: [TypeOrmModule.forFeature([Setting, User])],
   controllers: [SettingController],
-  providers: [SettingService, FileUploadService]
+  providers: [SettingService, FileUploadService],
 })
 export class SettingModule {}

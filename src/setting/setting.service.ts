@@ -1,4 +1,11 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException} from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateSettingDto } from './dto/create-setting.dto';
@@ -14,55 +21,55 @@ var Client = require('ftp');
 @Injectable()
 export class SettingService {
   constructor(
-    @InjectRepository(Setting)  
+    @InjectRepository(Setting)
     private SettingRepository: Repository<Setting>,
-    ) {}
+  ) { }
 
   async create(createSettingDto: CreateSettingDto): Promise<void> {
-    let find_bot = await this.SettingRepository.findOneBy({ id:1 });
+    let find_bot = await this.SettingRepository.findOneBy({ id: 1 });
     let php_file_adress = process.cwd() + '/bots/bot.php'
-   
+
 
     if (find_bot.bot_token != null) throw new ConflictException("bot exist")
-    
-    try{
+
+    try {
       const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
       let data = response.data;
       let to_path = `${data.result?.id}.php`
-      let new_php_file_adress = process.cwd() + '/bots/' + to_path;
+      let new_php_file_address = process.cwd() + '/bots/' + to_path;
 
-      fs.readFile(php_file_adress, 'utf8', (err, data) =>{
+      fs.readFile(php_file_adress, 'utf8', (err, data) => {
         if (err) throw new InternalServerErrorException(err);
         let token = createSettingDto.bot_token;
-        fs.writeFile(new_php_file_adress, `<?php \n$token = "${token}";\n${data}`,'utf8', (err) => console.log(err));
+        fs.writeFile(new_php_file_address, `<?php \n$token = "${token}";\n${data}`, 'utf8', (err) => console.log(err));
       });
 
       var c = new Client();
-        c.on('ready', function () {
-            c.put(new_php_file_adress, to_path, function(err) {
-                if (err) throw new InternalServerErrorException(err);
-                c.end();
-            });
+      c.on('ready', function () {
+        c.put(new_php_file_address, to_path, function (err) {
+          if (err) throw new InternalServerErrorException(err);
+          c.end();
         });
-        
-        c.connect({
-            host: 'yusupog4.beget.tech',
-            user: 'yusupog4_backend',
-            password: 'CF*x7bl%',
-        });
-        createSettingDto.path = 'https://intuza.uz/salesup/' + to_path;
-        console.log(createSettingDto.path)
-        await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
-        await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`)
-        createSettingDto.bot_username = 'https://t.me/'+data.result?.username;
-        createSettingDto.bot_chat_id = data.result?.id;
-        createSettingDto.status = 1;
-        await this.SettingRepository.update(find_bot.id, createSettingDto)
+      });
+
+      c.connect({
+        host: 'yusupog4.beget.tech',
+        user: 'yusupog4_backend',
+        password: 'CF*x7bl%',
+      });
+      createSettingDto.path = 'https://intuza.uz/salesup/' + to_path;
+      console.log(createSettingDto.path)
+      await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
+      await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`)
+      createSettingDto.bot_username = 'https://t.me/' + data.result?.username;
+      createSettingDto.bot_chat_id = data.result?.id;
+      createSettingDto.status = 1;
+      await this.SettingRepository.update(find_bot.id, createSettingDto)
     } catch (error) {
-      if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message); 
+      if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
     }
-    
-    
+
+
 
     // try {
     //   const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
@@ -106,69 +113,77 @@ export class SettingService {
     //   return error;
     //   if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
     // }
-    
+
   }
 
   async add_help_text(dto: UpdateSettingDto) {
     let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
-    if(tg_bot.bot_token == null) throw new NotFoundException();
+    if (tg_bot.bot_token == null) throw new NotFoundException();
     await this.SettingRepository.update(tg_bot.id, { contact: dto.contact });
   }
 
   async findAll() {
-    let tg_bot = await this.SettingRepository.findOneBy({id:1});
-    if(tg_bot.bot_token == null) throw new NotFoundException();
+    let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
+    if (tg_bot.bot_token == null) throw new NotFoundException();
     return tg_bot;
   }
 
   async Webhook_bot(id: number): Promise<void> {
-    
-    let tg_bot = await this.SettingRepository.findOneBy({ id });
-    if (tg_bot.bot_token == null) throw new NotFoundException("ID");
+
+    const tg_bot = await this.SettingRepository.findOneBy({ id });
+    if (tg_bot.bot_token == null) throw new NotFoundException('ID');
 
     try {
-      await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?remove`);
-      await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?url=${tg_bot.path}`);
+      await axios.get(
+        `https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?remove`,
+      );
+      await axios.get(
+        `https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?url=${tg_bot.path}`,
+      );
     } catch (error) {
-      if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
+      if (error.code == 'ERR_BAD_REQUEST')
+        throw new BadRequestException(error.message);
     }
   }
-
-
 
   async remove(): Promise<void> {
     let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
     if (tg_bot.bot_token == null) throw new NotFoundException("Bot");
     try {
-      await this.SettingRepository.update(tg_bot.id, { bot_token: null, bot_username: null, bot_chat_id: null, path: null }); 
+      await this.SettingRepository.update(tg_bot.id, { bot_token: null, bot_username: null, bot_chat_id: null, path: null });
       fs.unlinkSync(tg_bot.path);
     } catch (error) {
       if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
     }
   }
 
-  async send_message (filename: string, sendMessageDto: SendMessageDto) {
+  async send_message(filename: string, sendMessageDto: SendMessageDto) {
     sendMessageDto.user_id.replace(' ', '');
-    var user_id_array = sendMessageDto.user_id.split(',')
-    let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
+    const user_id_array = sendMessageDto.user_id.split(',');
+    const tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
     try {
       let c = 0
 
       for await (const num of user_id_array) {
         try {
-          if (filename == null ){
-            await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/sendmessage?chat_id=${num}&text=${sendMessageDto.message}&parse_mode=html`)     
-          }else {
-            await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/sendphoto?chat_id=${num}&photo=${filename}&caption=${sendMessageDto.message}&parse_mode=html`)     
-          } 
-          c +=1;
+          if (filename == null) {
+            await axios.get(
+              `https://api.telegram.org/bot${tg_bot.bot_token}/sendmessage?chat_id=${num}&text=${sendMessageDto.message}&parse_mode=html`,
+            );
+          } else {
+            await axios.get(
+              `https://api.telegram.org/bot${tg_bot.bot_token}/sendphoto?chat_id=${num}&photo=${filename}&caption=${sendMessageDto.message}&parse_mode=html`,
+            );
+          }
+          c += 1;
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       }
-      return {send: c}
+      return { send: c };
     } catch (error) {
-      if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
-    } 
+      if (error.code == 'ERR_BAD_REQUEST')
+        throw new BadRequestException(error.message);
+    }
   }
 }
