@@ -1,4 +1,4 @@
-
+<?
 define('bot_token', $token);
 
 function Answer(array $content)
@@ -80,12 +80,12 @@ function SendRequest($url, $payload, $req) {
 
 
 function courses_btn () {
-    $courses = SendRequest("/course", '', 'GET');
+    $courses = SendRequest("/course?take=100", '', 'GET');
     if ($courses[0] != 200) return false;
 
     $array = [];
 
-    foreach ($courses[1] as $x) {
+    foreach ($courses[1]["data"] as $x) {
         $array[] = ["text" => $x["name"], "callback_data" => 'CourseID='.$x['id'] ];
     }
     
@@ -114,6 +114,14 @@ $bot_id = explode(':', $token)[0];
  
 
 $menu = [["Kurslar"], ["About", "Murajat"]];
+if ($text == '/test'){
+    $content = [ 
+        'chat_id' => $chat_id, 
+        'text' => "Bot Working", 
+        'parse_mode' => 'html',
+    ];
+    Answer($content);  
+}
 
 if (stripos($text, '/start') !== false) {
     unlink("$chat_id.$bot_id.txt");
@@ -150,11 +158,11 @@ if (@file_get_contents("$chat_id.$bot_id.txt") == "phone") {
     if(preg_match('/^[\+]?(998)?([- (])?(90|91|93|94|95|98|99|33|97|71|75)([- )])?(\d{3})([- ])?(\d{2})([- ])?(\d{2})$/', "$text") != false) {
         $api_payload = json_encode(["user_id" => "$chat_id", "phone" => "$text", "status" => 0]);
         SendRequest('/lead/:id?', $api_payload, 'PATCH');
-        $payload = ['chat_id' => $chat_id, 'text' => "Number Ok"];
+        $payload = ['chat_id' => $chat_id, 'text' => "menu", 'reply_markup' => buildKeyBoard($menu)];
         Answer($payload);
         unlink("$chat_id.$bot_id.txt");
     }else{
-        $payload = ['chat_id' => $chat_id, 'text' => "No Number"];
+        $payload = ['chat_id' => $chat_id, 'text' => "Nomerdi qate kiritin'iz qayta kiritin':"];
         Answer($payload);
     }
 } 

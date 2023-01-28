@@ -20,6 +20,7 @@ export class CourseController {
     return this.courseService.findAll(query);
   }
 
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.courseService.findOne(+id);
