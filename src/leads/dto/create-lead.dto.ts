@@ -23,4 +23,18 @@ export class CreateLeadDto {
     @IsNumber()
     @IsOptional()
     courseId?: number;
+
+    
+    // exdents for OrderPublic
+
+    @IsOptional()
+    @IsNumber()
+    course: any;
+
+    @IsOptional()
+    lead_course_id: string;
+
+    @IsEnum(LeadsStatus)
+    @IsOptional()
+    status?: LeadsStatus 
 }

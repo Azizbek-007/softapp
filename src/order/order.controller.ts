@@ -14,9 +14,9 @@ export class OrderController {
     private readonly orderLeadPublic: OrderLeadPublic
     ) {}
 
-  @Post('/ok')
-  okk(@Body() dto: CreateLeadDto) {
-    return this.orderLeadPublic.cr(dto);
+  @Post('/create/public')
+  create_public(@Body() dto: CreateLeadDto) {
+    return this.orderLeadPublic.public_create(dto);
   }
 
   @Post()
