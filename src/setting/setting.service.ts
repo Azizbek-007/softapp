@@ -27,12 +27,13 @@ export class SettingService {
 
   async create(createSettingDto: CreateSettingDto): Promise<void> {
     let find_bot = await this.SettingRepository.findOneBy({ id: 1 });
-    let php_file_adress = process.cwd() + '/bots/bot.php'
+    let php_file_address = process.cwd() + '/bots/bot.php'
 
-    fs.readFile(php_file_adress, 'utf8', (err, data) => {
+    fs.readFile(php_file_address, 'utf8', (err, data) => {
       if (err) throw new InternalServerErrorException(err);
       let token = createSettingDto.bot_token;
-      fs.writeFile(process.cwd() + '/../../bots.sales-up.uz/bots/wtf.php', `<?php \n$token = "${token}";\n${data}`, 'utf8', (err) => console.log(err));
+      let bot_id = token.split(':')[0];
+      fs.writeFile(process.cwd() + `/../../bots.sales-up.uz/bots/${bot_id}.php` , `<?php \n$token = "${token}";\n${data}`, 'utf8', (err) => console.log(err));
     });
 
     // if (find_bot.bot_token != null) throw new ConflictException("bot exist")
