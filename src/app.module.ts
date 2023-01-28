@@ -23,13 +23,6 @@ import { ShareModule } from './share/share.module';
       dest: '../uploads', // upload adress
 
     }),
-    ServeStaticModule.forRoot({
-      serveRoot: '/upload/', //prefix
-      rootPath: join(__dirname, '..', 'uploads'), // added ../ to get one folder back
-      serveStaticOptions: {
-        index: false
-      }
-    }),
     CourseModule,
     LeadsModule,
     InstrumentModule,
