@@ -115,11 +115,11 @@ export class SettingService {
         try {
           if (filename == null) {
             await axios.get(
-              `https://api.telegram.org/bot${tg_bot.bot_token}/sendmessage?chat_id=${user.user_id}&text=${sendMessageDto.message}&parse_mode=html`,
+              `https://api.telegram.org/bot${tg_bot.bot_token}/sendmessage?chat_id=${user.user_id}&text=${encodeURI(sendMessageDto.message)}&parse_mode=html`,
             );
           } else {
             await axios.get(
-              `https://api.telegram.org/bot${tg_bot.bot_token}/sendphoto?chat_id=${user.user_id}&photo=${filename}&caption=${sendMessageDto.message}&parse_mode=html`,
+              `https://api.telegram.org/bot${tg_bot.bot_token}/sendphoto?chat_id=${user.user_id}&photo=${filename}&caption=${encodeURI(sendMessageDto.message)}&parse_mode=html`,
             );
           }
           c += 1;
@@ -136,11 +136,11 @@ export class SettingService {
         try {
           if (filename == null) {
             await axios.get(
-              `https://api.telegram.org/bot${tg_bot.bot_token}/sendmessage?chat_id=${num}&text=${sendMessageDto.message}&parse_mode=html`,
+              `https://api.telegram.org/bot${tg_bot.bot_token}/sendmessage?chat_id=${num}&text=${encodeURI(sendMessageDto.message)}&parse_mode=html`,
             );
           } else {
             await axios.get(
-              `https://api.telegram.org/bot${tg_bot.bot_token}/sendphoto?chat_id=${num}&photo=${filename}&caption=${sendMessageDto.message}&parse_mode=html`,
+              `https://api.telegram.org/bot${tg_bot.bot_token}/sendphoto?chat_id=${num}&photo=${filename}&caption=${encodeURI(sendMessageDto.message)}&parse_mode=html`,
             );
           }
           c += 1;
