@@ -27,82 +27,30 @@ export class SettingService {
 
   async create(createSettingDto: CreateSettingDto): Promise<void> {
     let find_bot = await this.SettingRepository.findOneBy({ id: 1 });
-    let php_file_address = process.cwd() + '/bots/bot.php'
+    let php_file_address = process.cwd() + '/bots/bot.php';
 
-    fs.readFile(php_file_address, 'utf8', (err, data) => {
+    if (find_bot.bot_token != null) throw new ConflictException("bot exist")
+    
+    let token = createSettingDto.bot_token;
+    let bot_id = token.split(':')[0];
+
+    fs.readFile(php_file_address, 'utf8', (err: any, data: any) => {
       if (err) throw new InternalServerErrorException(err);
-      let token = createSettingDto.bot_token;
-      let bot_id = token.split(':')[0];
-      fs.writeFile(process.cwd() + `/../../bots.sales-up.uz/bots/${bot_id}.php` , `<?php \n$token = "${token}";\n${data}`, 'utf8', (err) => console.log(err));
+      fs.writeFile(process.cwd() + `/../../bots.sales-up.uz/bots/${bot_id}.php` , `<?php \n$token = "${token}";\n${data}`, 'utf8', 
+      (err) => console.log(err));
     });
-
-    // if (find_bot.bot_token != null) throw new ConflictException("bot exist")
-
-    // try {
-    //   const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
-    //   let data = response.data;
-    //   let to_path = `${data.result?.id}.php`
-    //   let new_php_file_address = process.cwd() + '/bots/' + to_path;
-
-      
-
-
-    //   createSettingDto.path = 'https://intuza.uz/salesup/' + to_path;
-    //   console.log(createSettingDto.path)
-    //   await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
-    //   await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`)
-    //   createSettingDto.bot_username = 'https://t.me/' + data.result?.username;
-    //   createSettingDto.bot_chat_id = data.result?.id;
-    //   createSettingDto.status = 1;
-    //   await this.SettingRepository.update(find_bot.id, createSettingDto)
-    // } catch (error) {
-    //   if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
-    // }
-
-
-
-    // try {
-    //   const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`)
-
-    //   let data = response.data;
-    //   let to_path = `${data.result?.id}.php`
-    //   let new_php_file_adress = '/' + process.cwd() + '/bots/' + to_path;
-
-
-    //   fs.readFile(php_file_adress, 'utf8', (err, data) =>{
-    //     let token = createSettingDto.bot_token;
-    //     fs.writeFile(new_php_file_adress, `<?php \n$token = "${token}";\n${data}`,'utf8', (err) => console.log(err));
-    //   });
-
-    //   c.on('ready', function () {
-    //     c.list( "/", function (err, list) {
-    //         if (err) throw err;
-    //         console.dir(list);
-    //     });
-    //     c.put(new_php_file_adress, to_path, function(err) {
-    //         if (err) throw err;
-    //         c.end();
-    //     });
-    //   });
-    //   c.connect({
-    //       host: 'yusupog4.beget.tech',
-    //       user: 'yusupog4_salesup',
-    //       password: 'CF*x7bl%',
-    //   });
-
-    //   createSettingDto.path = 'https://intuza.uz/salesup/' + to_path;
-    //   // await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
-    //   // await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`)
-    //   createSettingDto.bot_username = 'https://t.me/'+data.result?.username;
-    //   createSettingDto.bot_chat_id = data.result?.id;
-    //   createSettingDto.status = 1;
-    //   let new_bot = this.SettingRepository.create(createSettingDto);
-    //   await new_bot.save() 
-
-    // } catch (error) {
-    //   return error;
-    //   if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
-    // }
+    try {
+      const response = await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/getMe`);
+      await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?remove`);
+      createSettingDto.path = `https://bots.sales-up.uz/bots/${bot_id}.php`;
+      await axios.get(`https://api.telegram.org/bot${createSettingDto.bot_token}/setWebhook?url=${createSettingDto.path}`);
+      createSettingDto.bot_username = 'https://t.me/' + response.data.result?.username;
+      createSettingDto.bot_chat_id = response.data.result?.id;
+      createSettingDto.status = 1;
+      await this.SettingRepository.update(find_bot.id, createSettingDto)
+    } catch (error) {
+      if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
+    }
 
   }
 
