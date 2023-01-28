@@ -10,6 +10,7 @@ import path from 'path';
 import { SendMessageDto } from './dto/send-message.dto';
 var fs = require('fs')
 var Client = require('ftp');
+
 @Injectable()
 export class SettingService {
   constructor(
