@@ -19,11 +19,15 @@ export class LeadsService {
 
   async create(createLeadDto: CreateLeadDto) {
     createLeadDto.instrument = createLeadDto.instrument || null;
+
     let find = (await this.InstrumentRepository.findOneBy({ code: createLeadDto.instrument }));
+    
     if(createLeadDto.instrument) createLeadDto.instrument = find?.id || null;
+    
     await this.InstrumentRepository.update(find.id, { clicked: find.clicked+1, distribution: find.price/(find.clicked+1)});
     
     let form_lead = this.LeadRepository.create(createLeadDto);
+    
     try {
       await form_lead.save()
       return form_lead;
@@ -31,7 +35,7 @@ export class LeadsService {
       if (error.code == 'ER_DUP_ENTRY') {
         throw new ConflictException('User id already exists');
       } else {
-        throw new InternalServerErrorException();
+        throw new InternalServerErrorException(error);
       }
     }   
   }
