@@ -1,4 +1,4 @@
-<?
+
 define('bot_token', $token);
 
 function Answer(array $content)
