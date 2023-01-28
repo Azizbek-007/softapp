@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
@@ -15,8 +15,8 @@ export class InstrumentController {
   }
 
   @Get()
-  findAll() {
-    return this.instrumentService.findAll();
+  findAll(@Query() querys) {
+    return this.instrumentService.findAll(querys);
   }
 
   @Get(':id')

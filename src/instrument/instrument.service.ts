@@ -32,15 +32,27 @@ export class InstrumentService {
       return new_link;
   }
 
-  async findAll(): Promise<Instrument[]> {
-    let all_links = await this.InstrumentRepository.find({
-      order: { 'id' : 'DESC'}
-    });
-    if (all_links.length == 0) {
+  async findAll(query) {
+    const take = query.take || 10
+    const page=query.page || 1;
+    const skip= (page-1) * take ;
+
+    const [data, total] = await this.InstrumentRepository.findAndCount(
+      {
+        cache: true,
+        order: {
+          id: 'DESC'
+        },
+        
+        take: take,
+        skip: skip
+      }
+    );
+    if (data.length == 0) {
       throw new NotFoundException();
     }
     
-    return all_links;
+    return {data, total}
   }
 
   findOne(id: number) {

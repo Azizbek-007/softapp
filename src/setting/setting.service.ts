@@ -73,7 +73,7 @@ export class SettingService {
 
     try {
       await axios.get(
-        `https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?remove`,
+        `https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?remove`
       );
       await axios.get(
         `https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?url=${tg_bot.path}`,
@@ -88,7 +88,14 @@ export class SettingService {
     let tg_bot = await this.SettingRepository.findOneBy({ id: 1 });
     if (tg_bot.bot_token == null) throw new NotFoundException("Bot");
     try {
-      await this.SettingRepository.update(tg_bot.id, { bot_token: null, bot_username: null, bot_chat_id: null, path: null });
+      await axios.get(`https://api.telegram.org/bot${tg_bot.bot_token}/setWebhook?remove`);
+      await this.SettingRepository.update(tg_bot.id, { 
+        bot_token: null, 
+        bot_username: null, 
+        bot_chat_id: null, 
+        path: null,
+        contact: null
+      });
       fs.unlinkSync(tg_bot.path);
     } catch (error) {
       if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
