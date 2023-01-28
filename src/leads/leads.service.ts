@@ -25,8 +25,8 @@ export class LeadsService {
           clicked: find.clicked+1, 
           distribution: find.price/(find.clicked+1)
         });
+      createLeadDto.instrument = find;
     }
-    
     let form_lead = this.LeadRepository.create(createLeadDto);
     
     try {
