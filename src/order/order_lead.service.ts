@@ -38,7 +38,7 @@ export class OrderLeadPublic extends LeadsService{
             await new_order.save();
             return new_order;
         } catch (error) {
-            if (error['code'] == 'ER_NO_REFERENCED_ROW_2') {
+            if (error['errno'] == 'ER_NO_REFERENCED_ROW_2') {
                 throw new NotFoundException("Not found course or lead id " + dto.course);
             }
             if (error['code'] == 'ER_DUP_ENTRY'){

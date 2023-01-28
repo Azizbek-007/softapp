@@ -33,6 +33,9 @@ export class LeadsService {
       await form_lead.save()
       return form_lead;
     } catch (error) {
+      if (error['code'] == 'ER_NO_REFERENCED_ROW_2') {
+        throw new NotFoundException("Not found course id " + createLeadDto.courseId);
+      }
       if (error.code == 'ER_DUP_ENTRY') {
         throw new ConflictException('User id already exists');
       } else {
