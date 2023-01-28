@@ -99,7 +99,7 @@ export class SettingService {
         path: null,
         contact: null
       });
-      fs.unlinkSync(tg_bot.path);
+      // fs.unlinkSync(tg_bot.path);
     } catch (error) {
       if (error.code == 'ERR_BAD_REQUEST') throw new BadRequestException(error.message);
     }
