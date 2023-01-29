@@ -9,7 +9,7 @@ export class ShareService {
     @InjectRepository(Instrument)
     private InstrumentRepository: Repository<Instrument>,
   ) {}
-  async add_check(share_code: string) {
+  async add_check(share_code: string, res: any) {
     const one_link = await this.InstrumentRepository.findOneBy({
       code: share_code,
     });
@@ -21,5 +21,6 @@ export class ShareService {
       clicked: one_link.clicked + 1,
       distribution: one_link.price / (one_link.clicked + 1),
     });
+    res.redirect("https://demo.sales-up.uz/form");
   }
 }
