@@ -1,4 +1,4 @@
-<?php
+define('base_url', $API_PATH);
 define('bot_token', $token);
 
 function Answer(array $content)
@@ -57,7 +57,7 @@ function SendRequest($url, $payload, $req) {
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-    CURLOPT_URL => $API_PATH.$url,
+    CURLOPT_URL => base_url.$url,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,

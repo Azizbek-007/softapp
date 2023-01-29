@@ -40,7 +40,7 @@ export class SettingService {
       if (err) throw new InternalServerErrorException(err);
       fs.writeFile(
         process.cwd() + `/../../bots.sales-up.uz/bots/${bot_id}.php`,
-        `<?php \n$API_PATH="${api_path}"\n$token = "${token}";\n${data}`,
+        `<?php \n$API_PATH="${api_path}";\n$token = "${token}";\n${data}`,
         'utf8',
         (err) => console.log(err),
       );
