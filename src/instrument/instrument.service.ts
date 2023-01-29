@@ -39,7 +39,6 @@ export class InstrumentService {
     const skip = (page - 1) * take;
 
     const [data, total] = await this.InstrumentRepository.findAndCount({
-      cache: true,
       order: {
         id: 'DESC',
       },
