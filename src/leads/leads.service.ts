@@ -105,10 +105,12 @@ export class LeadsService {
   }
 
   async update(id: number, updateLeadDto: UpdateLeadDto) {
-    const lead_id = id || null;
-    const find = await this.LeadRepository.findOne({
-      where: [{ id: lead_id }, { user_id: updateLeadDto.user_id }],
-    });
+    let find: Lead;
+    if (updateLeadDto.user_id){
+      find = await this.LeadRepository.findOneBy({ user_id: updateLeadDto.user_id });
+    } else if (id) {
+      find = await this.LeadRepository.findOneBy({ id });
+    }
     if (!find) {
       throw new NotFoundException();
     }

@@ -34,7 +34,7 @@ export class LeadsController {
     return this.leadsService.findOne(user_id);
   }
 
-  @Patch(':id?')
+  @Patch(':id')
   update(@Param('id') id?: string, @Body() updateLeadDto?: UpdateLeadDto) {
     return this.leadsService.update(+id, updateLeadDto);
   }
