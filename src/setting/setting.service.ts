@@ -28,7 +28,7 @@ export class SettingService {
     private LeadRepository: Repository<Lead>,
   ) {}
 
-  async create(createSettingDto: CreateSettingDto): Promise<void> {
+  async create(createSettingDto: CreateSettingDto, api_path: string): Promise<void> {
     const find_bot = await this.SettingRepository.findOneBy({ id: 1 });
     const php_file_address = process.cwd() + '/bots/bot.php';
 
@@ -36,12 +36,11 @@ export class SettingService {
 
     const token = createSettingDto.bot_token;
     const bot_id = token.split(':')[0];
-
     fs.readFile(php_file_address, 'utf8', (err: any, data: any) => {
       if (err) throw new InternalServerErrorException(err);
       fs.writeFile(
         process.cwd() + `/../../bots.sales-up.uz/bots/${bot_id}.php`,
-        `<?php \n$token = "${token}";\n${data}`,
+        `<?php \n$API_PATH="${api_path}"\n$token = "${token}";\n${data}`,
         'utf8',
         (err) => console.log(err),
       );

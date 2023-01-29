@@ -39,8 +39,9 @@ export class SettingController {
   ) {}
 
   @Post()
-  create(@Body() createSettingDto: CreateSettingDto) {
-    return this.settingService.create(createSettingDto);
+  create(@Body() createSettingDto: CreateSettingDto, @Req() req) {
+    const api_path = 'http://' + req.host + '/api/v1'
+    return this.settingService.create(createSettingDto, api_path);
   }
 
   @Get()
@@ -86,7 +87,7 @@ export class SettingController {
   )
   async sendMesage(
     @UploadedFile() file: Express.Multer.File,
-    @Body() sendMessageDto: SendMessageDto,
+    @Body() sendMessageDto: SendMessageDto
   ) {
     let aws_s3_location: string;
     file ? (aws_s3_location = await this.FileUploadService.upload(file)) : null;
