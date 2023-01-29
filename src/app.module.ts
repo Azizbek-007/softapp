@@ -7,13 +7,10 @@ import { LeadsModule } from './leads/leads.module';
 import { InstrumentModule } from './instrument/instrument.module';
 import { OrderModule } from './order/order.module';
 import { SettingModule } from './setting/setting.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { SupportModule } from './support/support.module';
 import { ShareModule } from './share/share.module';
-
 
 @Module({
   imports: [
@@ -21,7 +18,6 @@ import { ShareModule } from './share/share.module';
     TypeOrmModule.forRoot(TypeOrmConfig),
     MulterModule.register({
       dest: '../uploads', // upload adress
-
     }),
     CourseModule,
     LeadsModule,
@@ -30,7 +26,7 @@ import { ShareModule } from './share/share.module';
     SettingModule,
     AuthModule,
     SupportModule,
-    ShareModule
-  ]
+    ShareModule,
+  ],
 })
 export class AppModule {}

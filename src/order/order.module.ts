@@ -9,11 +9,8 @@ import { OrderLeadPublic } from './order_lead.service';
 import { Instrument } from 'src/instrument/entities/instrument.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Order, Lead, Instrument]), 
-    AuthModule
-  ],
+  imports: [TypeOrmModule.forFeature([Order, Lead, Instrument]), AuthModule],
   controllers: [OrderController],
-  providers: [OrderService, OrderLeadPublic]
+  providers: [OrderService, OrderLeadPublic],
 })
 export class OrderModule {}

@@ -1,10 +1,9 @@
-import { IsArray, IsOptional, IsString } from "class-validator";
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class SendMessageDto {
+  @IsString()
+  message: string;
 
-    @IsString()
-    message: string
-
-    @IsOptional()
-    user_id: string
+  @IsOptional()
+  user_id: string;
 }

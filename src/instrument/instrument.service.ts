@@ -10,49 +10,48 @@ import { InstrumentTypeEnum } from './intrument.enum';
 
 @Injectable()
 export class InstrumentService {
-  constructor (
-    @InjectRepository(Instrument) private InstrumentRepository: Repository<Instrument>,
-    @InjectRepository(Setting)  
-    private SettingRepository: Repository<Setting>
+  constructor(
+    @InjectRepository(Instrument)
+    private InstrumentRepository: Repository<Instrument>,
+    @InjectRepository(Setting)
+    private SettingRepository: Repository<Setting>,
   ) {}
 
   async create(createInstrumentDto: CreateInstrumentDto, host: string) {
-    let bot_info = await this.SettingRepository.findOneBy({ id: 1 });
-    let hash_uuid = generate();
+    const bot_info = await this.SettingRepository.findOneBy({ id: 1 });
+    const hash_uuid = generate();
     if (createInstrumentDto.type == InstrumentTypeEnum.telegram_bot) {
-      createInstrumentDto.link = bot_info.bot_username + "?start=" + hash_uuid;
+      createInstrumentDto.link = bot_info.bot_username + '?start=' + hash_uuid;
       createInstrumentDto.code = hash_uuid;
     } else {
       createInstrumentDto.link = `http://${host}/api/v1/?share=` + hash_uuid;
       createInstrumentDto.code = hash_uuid;
     }
 
-    let new_link = this.InstrumentRepository.create(createInstrumentDto);
-      await new_link.save();
-      return new_link;
+    const new_link = this.InstrumentRepository.create(createInstrumentDto);
+    await new_link.save();
+    return new_link;
   }
 
   async findAll(query) {
-    const take = query.take || 10
-    const page=query.page || 1;
-    const skip= (page-1) * take ;
+    const take = query.take || 10;
+    const page = query.page || 1;
+    const skip = (page - 1) * take;
 
-    const [data, total] = await this.InstrumentRepository.findAndCount(
-      {
-        cache: true,
-        order: {
-          id: 'DESC'
-        },
-        
-        take: take,
-        skip: skip
-      }
-    );
+    const [data, total] = await this.InstrumentRepository.findAndCount({
+      cache: true,
+      order: {
+        id: 'DESC',
+      },
+
+      take: take,
+      skip: skip,
+    });
     if (data.length == 0) {
       throw new NotFoundException();
     }
-    
-    return {data, total}
+
+    return { data, total };
   }
 
   findOne(id: number) {
@@ -60,20 +59,19 @@ export class InstrumentService {
   }
 
   async update(id: number, updateInstrumentDto: UpdateInstrumentDto) {
-
-    let one_link = await this.InstrumentRepository.findOneBy({ id });
+    const one_link = await this.InstrumentRepository.findOneBy({ id });
 
     if (one_link == null) {
       throw new NotFoundException();
     }
     await this.InstrumentRepository.update(one_link.id, {
       clicked: one_link.clicked + 1,
-      distribution: one_link.price/(one_link.clicked +1)
+      distribution: one_link.price / (one_link.clicked + 1),
     });
   }
 
   async remove(id: number) {
-    let one_link = await this.InstrumentRepository.findOneBy({ id });
+    const one_link = await this.InstrumentRepository.findOneBy({ id });
     if (one_link == null) {
       throw new NotFoundException();
     }

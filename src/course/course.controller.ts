@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards, Patch, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -10,7 +20,7 @@ export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @Get('all')
-  findAllCourse () {
+  findAllCourse() {
     return this.courseService.findAll_public();
   }
 

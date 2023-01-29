@@ -13,7 +13,8 @@ import { JwtStrategy } from './jwt-strategy';
     JwtModule.register({
       secret: 'TopSecret',
     }),
-    TypeOrmModule.forFeature([ User ])],
+    TypeOrmModule.forFeature([User]),
+  ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
   exports: [JwtStrategy, PassportModule],

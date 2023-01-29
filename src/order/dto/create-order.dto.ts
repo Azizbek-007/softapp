@@ -1,18 +1,18 @@
-import { LeadsStatus } from "src/leads/role.enum";
+import { LeadsStatus } from 'src/leads/role.enum';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
-import { Course } from "src/course/entities/course.entity";
-import { Lead } from "src/leads/entities/lead.entity";
+import { Course } from 'src/course/entities/course.entity';
+import { Lead } from 'src/leads/entities/lead.entity';
 
-export class CreateOrderDto{
-    @IsOptional()
-    lead: Lead;
+export class CreateOrderDto {
+  @IsOptional()
+  lead: Lead;
 
-    @IsString()
-    user_id: string;
+  @IsString()
+  user_id: string;
 
-    @IsNumber()
-    course: Course;
+  @IsNumber()
+  course: Course;
 
-    @IsOptional()
-    lead_course_id: string;
+  @IsOptional()
+  lead_course_id: string;
 }

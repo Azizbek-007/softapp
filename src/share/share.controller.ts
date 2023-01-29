@@ -1,4 +1,4 @@
-import { Controller, Get, Query} from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ShareService } from './share.service';
 
 @Controller()

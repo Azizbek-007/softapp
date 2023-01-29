@@ -5,8 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Instrument } from 'src/instrument/entities/instrument.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ Instrument ])],
+  imports: [TypeOrmModule.forFeature([Instrument])],
   controllers: [ShareController],
-  providers: [ShareService]
+  providers: [ShareService],
 })
 export class ShareModule {}

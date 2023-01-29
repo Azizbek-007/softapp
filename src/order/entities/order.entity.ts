@@ -1,35 +1,42 @@
-import { Course } from "src/course/entities/course.entity";
-import { Lead } from "src/leads/entities/lead.entity";
-import { LeadsStatus } from "src/leads/role.enum";
-import { ManyToOne, Entity, BaseEntity, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, Column } from "typeorm";
+import { Course } from 'src/course/entities/course.entity';
+import { Lead } from 'src/leads/entities/lead.entity';
+import { LeadsStatus } from 'src/leads/role.enum';
+import {
+  ManyToOne,
+  Entity,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  OneToMany,
+  Column,
+} from 'typeorm';
 
 @Entity('orders')
 export class Order extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    FIO: string;
+  @Column()
+  FIO: string;
 
-    @Column({ nullable: true })
-    phone: string;
+  @Column({ nullable: true })
+  phone: string;
 
-    @Column('enum', { enum: LeadsStatus, default: 0})
-    order_status: LeadsStatus;
-    
-    @Column({ unique: true })
-    lead_course_id: string;
+  @Column('enum', { enum: LeadsStatus, default: 0 })
+  order_status: LeadsStatus;
 
-    @Column({ nullable: true })
-    order_comment: string;
+  @Column({ unique: true })
+  lead_course_id: string;
 
-    @ManyToOne((type) => Lead, (lead) => lead.order)
-    lead: Lead;
+  @Column({ nullable: true })
+  order_comment: string;
 
-    @ManyToOne((type) => Course, (course) => course.order)
-    course: Course;
+  @ManyToOne((type) => Lead, (lead) => lead.order)
+  lead: Lead;
 
+  @ManyToOne((type) => Course, (course) => course.order)
+  course: Course;
 
-    @CreateDateColumn({ name: 'created_at' })
-    createdAt: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 }

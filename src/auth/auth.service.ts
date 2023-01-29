@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAuthDto } from './dto/create-auth.dto';
@@ -9,18 +14,18 @@ import { JwtPayload } from './interface/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
-  constructor (
+  constructor(
     @InjectRepository(User) private UserRepository: Repository<User>,
     private jwtService: JwtService,
   ) {}
 
   async create(createAuthDto: CreateAuthDto) {
-    let salt = await bcrypt.genSalt();
-    let password = await bcrypt.hash(createAuthDto.password, salt);
+    const salt = await bcrypt.genSalt();
+    const password = await bcrypt.hash(createAuthDto.password, salt);
     const new_user = this.UserRepository.create({
       username: createAuthDto.username,
       salt,
-      password
+      password,
     });
 
     try {
@@ -46,6 +51,4 @@ export class AuthService {
       throw new UnauthorizedException('Please check your login credentials');
     }
   }
-
-
 }

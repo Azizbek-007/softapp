@@ -6,8 +6,8 @@ import { Support } from './entities/support.entity';
 import { Setting } from 'src/setting/entities/setting.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ Support, Setting ])],
+  imports: [TypeOrmModule.forFeature([Support, Setting])],
   controllers: [SupportController],
-  providers: [SupportService]
+  providers: [SupportService],
 })
 export class SupportModule {}

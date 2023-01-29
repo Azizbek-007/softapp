@@ -7,12 +7,8 @@ import { AuthModule } from 'src/auth/auth.module';
 import { Instrument } from 'src/instrument/entities/instrument.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([ Lead, Instrument ]),
-    AuthModule
-  ],
+  imports: [TypeOrmModule.forFeature([Lead, Instrument]), AuthModule],
   controllers: [LeadsController],
-  providers: [LeadsService]
+  providers: [LeadsService],
 })
 export class LeadsModule {}
- 

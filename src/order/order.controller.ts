@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -10,8 +20,8 @@ import { CreateLeadDto } from 'src/leads/dto/create-lead.dto';
 export class OrderController {
   constructor(
     private readonly orderService: OrderService,
-    private readonly orderLeadPublic: OrderLeadPublic
-    ) {}
+    private readonly orderLeadPublic: OrderLeadPublic,
+  ) {}
 
   @Post('/create/public')
   create_public(@Body() dto: CreateLeadDto) {
@@ -47,5 +57,4 @@ export class OrderController {
   remove(@Param('id') id: string) {
     return this.orderService.remove(+id);
   }
-
 }
