@@ -13,7 +13,9 @@ import { LeadsStatus } from '../role.enum';
 import { CreateLeadDto } from './create-lead.dto';
 
 export class UpdateLeadDto {
+
   @IsString()
+  @IsOptional()
   user_id: string;
 
   @IsString()
