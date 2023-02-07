@@ -37,4 +37,8 @@ export class UpdateLeadDto {
   @IsNumber()
   @IsOptional()
   courseId?: number;
+
+  @IsNumber()
+  @IsOptional()
+  real_status: any;
 }

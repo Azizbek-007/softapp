@@ -1,4 +1,4 @@
-
+<?
 define('base_url', $API_PATH);
 define('bot_token', $token);
 
@@ -129,7 +129,7 @@ if (stripos($text, '/start') !== false) {
     unlink("$chat_id.$bot_id.txt");
     $text_spilt = explode(' ', $text); 
     if(Count($text_spilt) == 2){
-        $payload = json_encode(["user_id" => "$chat_id",  "FIO" => "$first_name $last_name", "instrument" => $text_spilt[1] ]);
+        $payload = json_encode(["user_id" => "$chat_id",  "FIO" => "$first_name $last_name", "instrument" => $text_spilt[1],  ]);
         $data = SendRequest('/lead', $payload, 'POST');
         SendRequest('instrument/:id', $payload, 'PATCH');
     }else{
