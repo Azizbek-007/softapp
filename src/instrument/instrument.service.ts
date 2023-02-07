@@ -64,6 +64,7 @@ export class InstrumentService {
     const one_link: any = await this.InstrumentRepository.findOneBy({ id });
 
     const leadDistubationCount = await this.LeadRepository.countBy({ instrument: one_link.id, phone: Not('0') })
+  
     
     if (one_link == null) {
       throw new NotFoundException();

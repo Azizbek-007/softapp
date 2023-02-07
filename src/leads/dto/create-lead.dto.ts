@@ -1,3 +1,4 @@
+import { Status } from 'aws-sdk/clients/directconnect';
 import {
   IsString,
   IsPhoneNumber,
@@ -29,6 +30,8 @@ export class CreateLeadDto {
   @IsOptional()
   courseId?: number;
 
+  @IsNumber()
+  real_status: any;
   // exdents for OrderPublic
 
   @IsOptional()
@@ -41,4 +44,5 @@ export class CreateLeadDto {
   @IsEnum(LeadsStatus)
   @IsOptional()
   status?: LeadsStatus;
+
 }

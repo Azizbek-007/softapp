@@ -32,8 +32,12 @@ export class Lead extends BaseEntity {
   @Column({ default: '0' })
   phone: string;
 
-  @OneToOne(() => Status, { 'createForeignKeyConstraints': false })
-  status: number;
+  @Column('enum', { enum: LeadsStatus, default: 0 })
+  status: LeadsStatus;
+
+  @OneToOne(() => Status, { createForeignKeyConstraints: false})
+  @JoinColumn()
+  real_status: Status;
 
   @Column({ nullable: true })
   comment: string;
@@ -43,7 +47,7 @@ export class Lead extends BaseEntity {
 
   @Column({ nullable: true })
   courseId: number;
-
+  
   @ManyToOne(() => Instrument, (instrument) => instrument.leads, {
     eager: true,
     nullable: true,

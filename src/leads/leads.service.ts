@@ -34,17 +34,23 @@ export class LeadsService {
   ) {}
 
   async create(createLeadDto: CreateLeadDto) {
+
     if (createLeadDto.instrument) {
-      const find = await this.InstrumentRepository.findOneBy({
+      const find: any = await this.InstrumentRepository.findOneBy({
         code: createLeadDto.instrument,
       });
+      const leadDistubationCount = await this.LeadRepository.countBy({ 
+        instrument: find.id, 
+        phone: Not('0') 
+      })
 
       await this.InstrumentRepository.update(find.id, {
-        clicked: find.clicked + 1,
-        distribution: find.price / (find.clicked + 1),
+        clicked:leadDistubationCount + 1,
+        distribution: find.price / (leadDistubationCount + 1),
       });
       createLeadDto.instrument = find;
     }
+
     const form_lead = this.LeadRepository.create(createLeadDto);
 
     try {
@@ -58,9 +64,9 @@ export class LeadsService {
       }
       if (error.code == 'ER_DUP_ENTRY') {
         throw new ConflictException('User id already exists');
-      } else {
-        throw new InternalServerErrorException(error);
       }
+      throw new InternalServerErrorException(error);
+      
     }
   }
 
@@ -75,7 +81,7 @@ export class LeadsService {
     const to_Date = query.to || '3000-01-01';
 
     const [data, total] = await this.LeadRepository.findAndCount({
-      cache: true,
+      relations: ['instrument', 'real_status'],
       where: {
         FIO: Like('%' + keyword + '%'),
         phone: Like('%' + phone + '%'),
