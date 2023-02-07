@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { SupportModule } from './support/support.module';
 import { ShareModule } from './share/share.module';
+import { StatusModule } from './status/status.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ShareModule } from './share/share.module';
     AuthModule,
     SupportModule,
     ShareModule,
+    StatusModule,
   ],
 })
 export class AppModule {}

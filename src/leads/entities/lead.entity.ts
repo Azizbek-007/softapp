@@ -1,6 +1,7 @@
 import { Course } from 'src/course/entities/course.entity';
 import { Instrument } from 'src/instrument/entities/instrument.entity';
 import { Order } from 'src/order/entities/order.entity';
+import { Status } from 'src/status/entities/status.entity';
 import {
   BaseEntity,
   BeforeInsert,
@@ -31,8 +32,8 @@ export class Lead extends BaseEntity {
   @Column({ default: '0' })
   phone: string;
 
-  @Column('enum', { enum: LeadsStatus, default: 0 })
-  status: LeadsStatus;
+  @OneToOne(() => Status, { 'createForeignKeyConstraints': false })
+  status: number;
 
   @Column({ nullable: true })
   comment: string;
