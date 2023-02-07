@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 import { Instrument } from './entities/instrument.entity';
 import { generate } from 'short-uuid';
 import { Setting } from 'src/setting/entities/setting.entity';
 import { InstrumentTypeEnum } from './intrument.enum';
+import { Lead } from 'src/leads/entities/lead.entity';
 
 @Injectable()
 export class InstrumentService {
@@ -15,6 +16,8 @@ export class InstrumentService {
     private InstrumentRepository: Repository<Instrument>,
     @InjectRepository(Setting)
     private SettingRepository: Repository<Setting>,
+    @InjectRepository(Lead)
+    private LeadRepository: Repository<Lead>
   ) {}
 
   async create(createInstrumentDto: CreateInstrumentDto, host: string) {
@@ -58,14 +61,17 @@ export class InstrumentService {
   }
 
   async update(id: number, updateInstrumentDto: UpdateInstrumentDto) {
-    const one_link = await this.InstrumentRepository.findOneBy({ id });
+    const one_link: any = await this.InstrumentRepository.findOneBy({ id });
 
+    const leadDistubationCount = await this.LeadRepository.countBy({ instrument: one_link.id, phone: Not('0') })
+    
     if (one_link == null) {
       throw new NotFoundException();
     }
+
     await this.InstrumentRepository.update(one_link.id, {
-      clicked: one_link.clicked + 1,
-      distribution: one_link.price / (one_link.clicked + 1),
+      clicked: leadDistubationCount + 1,
+      distribution: one_link.price / leadDistubationCount + 1,
     });
   }
 

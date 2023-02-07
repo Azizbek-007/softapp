@@ -11,6 +11,7 @@ export const TypeOrmConfig: TypeOrmModuleOptions = {
   database: process.env.DB_NAME,
   autoLoadEntities: true,
   synchronize: true,
+  logging: true,
   cache: {
     duration: 60000,
   },

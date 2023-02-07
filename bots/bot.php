@@ -1,3 +1,4 @@
+
 define('base_url', $API_PATH);
 define('bot_token', $token);
 
@@ -111,9 +112,10 @@ $callback_from_id = $data["callback_query"]["from"]["id"];
 $callback_message_id = $data["callback_query"]["message"]["message_id"]; 
 $bot_id = explode(':', $token)[0];
 
- 
+$phoneNumber = $data["message"]["contact"]["phone_number"];
 
-$menu = [["Kurslar"], ["About", "Murajat"]];
+$menu = [["Kurslar"], ["Biz haqqimizda", "Murajat"]];
+ 
 if ($text == '/test'){
     $content = [ 
         'chat_id' => $chat_id, 
@@ -138,7 +140,17 @@ if (stripos($text, '/start') !== false) {
     $check_phone = SendRequest('/lead/'.$chat_id, '', 'GET'); 
     if($check_phone[0] == 200) {
         if ($check_phone[1]["phone"] == "0"){
-            $content = ['chat_id' => $chat_id, 'text' => "Assalawma aeykum telefon nomerin'izdi kiritin':", 'parse_mode' => 'markdown']; 
+            $content = ['chat_id' => $chat_id, 
+            'text' => "Assalawma aeykum telefon nomerin'izdi kiritin':", 
+            'parse_mode' => 'markdown',
+            'reply_markup'=> json_encode([
+                "resize_keyboard"=>true,
+                "one_time_keyboard"=>true,
+                    "keyboard"=>[
+                        [["text"=>"📲 Telefon nomer jiberiw","request_contact"=>true],],
+                    ]
+                ]),
+            ]; 
             Answer($content);
             @file_put_contents("$chat_id.$bot_id.txt", "phone");
             exit();
@@ -155,6 +167,7 @@ if (stripos($text, '/start') !== false) {
 }  
 
 if (@file_get_contents("$chat_id.$bot_id.txt") == "phone") {
+    $text = $phoneNumber ? $phoneNumber : $text;
     if(preg_match('/^[\+]?(998)?([- (])?(90|91|93|94|95|98|99|33|97|71|75)([- )])?(\d{3})([- ])?(\d{2})([- ])?(\d{2})$/', "$text") != false) {
         $api_payload = json_encode(["user_id" => "$chat_id", "phone" => "$text", "status" => 0]);
         SendRequest('/lead/:id?', $api_payload, 'PATCH');
@@ -188,11 +201,11 @@ if ($text == $menu[0][0]){
     Answer($content);  
 }
 
-if ($text == 'About'){
+if ($text == 'Biz haqqimizda'){
     $data = SendRequest('/setting', '', 'GET')[1];
     $content = [ 
         'chat_id' => $chat_id, 
-        'text' => $data["contact"]."\n\n©️ <b>SoftApp</b>", 
+        'text' => $data["contact"]."\n\n©️ <b>SalesUp</b>", 
         'parse_mode' => 'html',
     ];
     Answer($content);  

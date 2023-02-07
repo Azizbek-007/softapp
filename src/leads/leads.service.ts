@@ -38,6 +38,7 @@ export class LeadsService {
       const find = await this.InstrumentRepository.findOneBy({
         code: createLeadDto.instrument,
       });
+
       await this.InstrumentRepository.update(find.id, {
         clicked: find.clicked + 1,
         distribution: find.price / (find.clicked + 1),
@@ -132,7 +133,6 @@ export class LeadsService {
   }
 
   async ok() {
-    console.log('okokok');
     return 'ok';
   }
 }
