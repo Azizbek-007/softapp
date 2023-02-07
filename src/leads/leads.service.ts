@@ -122,6 +122,7 @@ export class LeadsService {
       throw new NotFoundException();
     }
     delete updateLeadDto.user_id;
+    
     try {
       await this.LeadRepository.update(find.id, updateLeadDto);
     } catch (error) {
